@@ -14,7 +14,6 @@ public class Loan {
     private double emi;
     private int creditScore;
 
-  
 
 	/**
 	 * @return the loanId

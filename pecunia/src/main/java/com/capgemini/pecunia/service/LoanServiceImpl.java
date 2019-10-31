@@ -1,9 +1,12 @@
 package com.capgemini.pecunia.service;
 
+import org.springframework.stereotype.Service;
+
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.exception.LoanException;
 
+@Service 
 public class LoanServiceImpl implements LoanService {
 
 	/*******************************************************************************************************
