@@ -1,13 +1,8 @@
 package com.capgemini.pecunia.service;
 
-import com.capgemini.pecunia.dao.LoanDAO;
-import com.capgemini.pecunia.dao.LoanDAOImpl;
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Loan;
-import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanException;
-import com.capgemini.pecunia.exception.PecuniaException;
-import com.capgemini.pecunia.util.LoggerMessage;
 
 public class LoanServiceImpl implements LoanService {
 

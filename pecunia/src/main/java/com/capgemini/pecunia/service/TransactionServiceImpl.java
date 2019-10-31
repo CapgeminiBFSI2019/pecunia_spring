@@ -6,10 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
-import com.capgemini.pecunia.dao.TransactionDAO;
-import com.capgemini.pecunia.dao.TransactionDAOImpl;
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Cheque;
 import com.capgemini.pecunia.dto.Transaction;
@@ -17,8 +14,9 @@ import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
+import com.capgemini.pecunia.hibernate.dao.TransactionDAO;
+import com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl;
 import com.capgemini.pecunia.util.Constants;
-import com.sun.webkit.ContextMenu.ShowContext;
 
 public class TransactionServiceImpl implements TransactionService {
 

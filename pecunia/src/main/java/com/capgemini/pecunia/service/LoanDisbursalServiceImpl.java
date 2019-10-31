@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
-import com.capgemini.pecunia.dao.LoanDisbursalDAOImpl;
-import com.capgemini.pecunia.dao.TransactionDAOImpl;
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.dto.LoanDisbursal;
@@ -27,7 +24,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 
 	}
 
-	TransactionDAOImpl transactionDAOImpl = new TransactionDAOImpl();
+	com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl transactionDAOImpl = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 	ArrayList<LoanDisbursal> approvedLoanList = new ArrayList<LoanDisbursal>();
 
 	/*******************************************************************************************************
