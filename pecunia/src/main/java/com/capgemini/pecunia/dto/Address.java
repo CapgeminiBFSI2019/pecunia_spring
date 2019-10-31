@@ -1,5 +1,8 @@
 package com.capgemini.pecunia.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Address {
 	private String id;
 	private String line1;

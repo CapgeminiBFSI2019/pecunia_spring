@@ -3,6 +3,7 @@ package com.capgemini.pecunia.service;
 import java.time.LocalDateTime;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Address;
@@ -13,7 +14,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.hibernate.dao.AccountManagementDAO;
 import com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl;
 import com.capgemini.pecunia.util.Constants;
-
+@Service
 public class AccountManagementServiceImpl implements AccountManagementService {
 
 	Logger logger = Logger.getRootLogger();
