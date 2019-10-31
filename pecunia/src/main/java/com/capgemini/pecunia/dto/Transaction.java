@@ -1,8 +1,8 @@
 package com.capgemini.pecunia.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+import org.springframework.stereotype.Component;
+@Component
 public class Transaction {
 	private int id;
 	private String accountId;

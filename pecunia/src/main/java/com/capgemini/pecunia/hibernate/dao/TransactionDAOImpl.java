@@ -15,7 +15,8 @@ import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.util.HibernateUtil;
 
 public class TransactionDAOImpl implements TransactionDAO {
-
+	
+	
 	@Override
 	public double getBalance(Account account) throws PecuniaException, TransactionException {
 
@@ -120,6 +121,8 @@ public class TransactionDAOImpl implements TransactionDAO {
 			transactionId = transactionEntity.getId();
 			txn.commit();
 		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 			if (txn != null) {
 				txn.rollback();
 			}

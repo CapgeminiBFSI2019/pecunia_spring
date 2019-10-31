@@ -2,6 +2,8 @@ package com.capgemini.pecunia.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+@Component
 public class Cheque {
 
 	private String id;

@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Cheque;
@@ -18,6 +19,7 @@ import com.capgemini.pecunia.hibernate.dao.TransactionDAO;
 import com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl;
 import com.capgemini.pecunia.util.Constants;
 
+@Service
 public class TransactionServiceImpl implements TransactionService {
 
 	Logger logger = Logger.getRootLogger();
@@ -225,7 +227,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException(e.getMessage());
 
 		} catch (Exception e) {
-
+			
 			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 
@@ -378,7 +380,7 @@ public class TransactionServiceImpl implements TransactionService {
 						} else {
 							chequeDetail.setStatus(Constants.CHEQUE_STATUS_CLEARED);
 							int chequeId = transactionDAO.generateChequeId(chequeDetail);
-
+							LocalDateTime transDate = LocalDateTime.now();
 							newBeneficiaryBalance = beneficiaryBalance + transaction.getAmount();
 							newPayeeBalance = payeeBalance - transaction.getAmount();
 
@@ -394,7 +396,8 @@ public class TransactionServiceImpl implements TransactionService {
 							creditTransaction.setTransFrom(transaction.getTransFrom());
 							creditTransaction.setTransTo(Constants.NA);
 							creditTransaction.setClosingBalance(newBeneficiaryBalance);
-
+							creditTransaction.setTransDate(transDate);
+							
 							debitTransaction = new Transaction();
 							debitTransaction.setAccountId(transaction.getTransFrom());
 							debitTransaction.setType(Constants.TRANSACTION_DEBIT);
@@ -404,7 +407,8 @@ public class TransactionServiceImpl implements TransactionService {
 							debitTransaction.setTransFrom(Constants.NA);
 							debitTransaction.setTransTo(transaction.getAccountId());
 							debitTransaction.setClosingBalance(newPayeeBalance);
-
+							debitTransaction.setTransDate(transDate);
+							
 							transId = transactionDAO.generateTransactionId(debitTransaction);
 							transId = transactionDAO.generateTransactionId(creditTransaction);
 
@@ -416,6 +420,7 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 			return transId;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 		}
