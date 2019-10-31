@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -27,7 +33,7 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	private String status;
 	private Double emi;
 	private int creditScore;
-	
+
 	private int loanIdOfAccepted;
 	private String accountIdOfAccepted;
 	private Double amountOfAccepted;
@@ -37,7 +43,7 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	private String statusOfAccepted;
 	private Double emiOfAccepted;
 	private int creditScoreOfAccepted;
-	
+
 	private int loanIdOfRejected;
 	private String accountIdOfRejected;
 	private Double amountOfRejected;
@@ -47,7 +53,7 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	private String statusOfRejected;
 	private Double emiOfRejected;
 	private int creditScoreOfRejected;
-	
+
 	private int loanDisbursedId;
 	private int loanId1;
 	private String accountId1;
@@ -56,13 +62,15 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	private double emiToBePaid;
 	private String loanType;
 
-
 	@Override
 	public List<Loan> retrieveLoanList() throws IOException, PecuniaException, LoanDisbursalException {
 		ArrayList<Loan> reqList = new ArrayList<>();
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			String hql = "FROM LoanRequestEntity";
-			Query<LoanRequestEntity> query = session.createQuery(hql);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<LoanRequestEntity> cr = cb.createQuery(LoanRequestEntity.class);
+			Root<LoanRequestEntity> root = cr.from(LoanRequestEntity.class);
+			cr.select(root);
+			Query<LoanRequestEntity> query = session.createQuery(cr);
 			List<LoanRequestEntity> results = query.list();
 			reqList = loanRequests(results);
 		} catch (Exception e) {
@@ -75,8 +83,13 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	public List<Loan> retrieveAcceptedLoanList() throws IOException, PecuniaException, LoanDisbursalException {
 		ArrayList<Loan> reqList = new ArrayList<>();
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			String hql = "FROM LoanRequestEntity WHERE credit_score >= 670 AND loan_status='Pending'";
-			Query<LoanRequestEntity> query = session.createQuery(hql);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<LoanRequestEntity> cr = cb.createQuery(LoanRequestEntity.class);
+			Root<LoanRequestEntity> root = cr.from(LoanRequestEntity.class);
+			Predicate greaterThanCreditScore = cb.gt(root.get("creditScore"), 670);
+			Predicate status = cb.like(root.get("status"), "Pending");
+			cr.select(root).where(cb.and(greaterThanCreditScore, status));
+			Query<LoanRequestEntity> query = session.createQuery(cr);
 			List<LoanRequestEntity> results = query.list();
 			reqList = acceptedLoanRequests(results);
 
@@ -90,8 +103,13 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	public List<Loan> retrieveRejectedLoanList() throws IOException, PecuniaException, LoanDisbursalException {
 		ArrayList<Loan> reqList = new ArrayList<>();
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			String hql = "FROM LoanRequestEntity WHERE credit_score < 670 AND loan_status = 'Pending'";
-			Query<LoanRequestEntity> query = session.createQuery(hql);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<LoanRequestEntity> cr = cb.createQuery(LoanRequestEntity.class);
+			Root<LoanRequestEntity> root = cr.from(LoanRequestEntity.class);
+			Predicate greaterThanCreditScore = cb.lt(root.get("creditScore"), 670);
+			Predicate status = cb.like(root.get("status"), "Pending");
+			cr.select(root).where(cb.and(greaterThanCreditScore, status));
+			Query<LoanRequestEntity> query = session.createQuery(cr);
 			List<LoanRequestEntity> results = query.list();
 			reqList = rejectedLoanRequests(results);
 		} catch (Exception e) {
@@ -123,12 +141,13 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	public ArrayList<LoanDisbursal> loanApprovedList() throws IOException, PecuniaException, LoanDisbursalException {
 		ArrayList<LoanDisbursal> reqList = new ArrayList<>();
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			String hql = "FROM LoanDisbursalEntity";
-			Query<LoanDisbursalEntity> query = session.createQuery(hql);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<LoanDisbursalEntity> cr = cb.createQuery(LoanDisbursalEntity.class);
+			Root<LoanDisbursalEntity> root = cr.from(LoanDisbursalEntity.class);
+			cr.select(root);
+			Query<LoanDisbursalEntity> query = session.createQuery(cr);
 			List<LoanDisbursalEntity> results = query.list();
-			System.out.println(results);
 			reqList = loanDisbursal(results);
-			System.out.println(reqList);
 		} catch (Exception e) {
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 		}
@@ -178,11 +197,12 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	public double totalEmi(String accountId) throws PecuniaException, LoanDisbursalException {
 		double totalEMI = 0.0;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			String hql = "SELECT SUM(emi) FROM LoanRequestEntity WHERE accountId=:accountId ";
-			Query query = session.createQuery(hql);
-			query.setParameter("accountId", accountId);
-			List<Double> results = query.list();
-			totalEMI = results.get(0);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Double> cr = cb.createQuery(Double.class);
+			Root<LoanRequestEntity> root = cr.from(LoanRequestEntity.class);
+			cr.select(cb.sum(root.get("emi"))).where(cb.like(root.get("accountId"), accountId));
+			TypedQuery<Double> query = session.createQuery(cr);
+			totalEMI = query.getSingleResult();
 		} catch (Exception e) {
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 		}
@@ -195,8 +215,11 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			throws IOException, PecuniaException, LoanDisbursalException {
 		ArrayList<Loan> reqList = new ArrayList<>();
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			String hql = "FROM LoanRequestEntity WHERE credit_score >= 670";
-			Query<LoanRequestEntity> query = session.createQuery(hql);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<LoanRequestEntity> cr = cb.createQuery(LoanRequestEntity.class);
+			Root<LoanRequestEntity> root = cr.from(LoanRequestEntity.class);
+			cr.select(root).where(cb.gt(root.get("creditScore"), 670));
+			Query<LoanRequestEntity> query = session.createQuery(cr);
 			List<LoanRequestEntity> results = query.list();
 			reqList = acceptedLoanRequests(results);
 		} catch (Exception e) {
@@ -208,11 +231,13 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 	@Override
 	public ArrayList<String> uniqueIds() throws IOException, PecuniaException, LoanDisbursalException {
 		ArrayList<String> accountId = new ArrayList<>();
-		List<String> accIds = new ArrayList<>();
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			String hql = "SELECT DISTINCT accountId FROM LoanDisbursalEntity";
-			Query query = session.createQuery(hql);
-			List<String> results = query.list();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<String> cr = cb.createQuery(String.class);
+			Root<LoanDisbursalEntity> root = cr.from(LoanDisbursalEntity.class);
+			cr.select(root.get("accountId")).distinct(true);
+			TypedQuery<String> query = session.createQuery(cr);
+			List<String> results = query.getResultList();
 			for (String res : results) {
 				accountId.add(res);
 			}
@@ -255,7 +280,8 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			statusOfAccepted = obj.getStatus();
 			emiOfAccepted = obj.getEmi();
 			creditScoreOfAccepted = obj.getCreditScore();
-			Loan loan = new Loan(loanIdOfAccepted, accountIdOfAccepted, amountOfAccepted, typeOfAccepted, tenureOfAccepted, roiOfAccepted, statusOfAccepted, emiOfAccepted, creditScoreOfAccepted);
+			Loan loan = new Loan(loanIdOfAccepted, accountIdOfAccepted, amountOfAccepted, typeOfAccepted,
+					tenureOfAccepted, roiOfAccepted, statusOfAccepted, emiOfAccepted, creditScoreOfAccepted);
 			reqList.add(loan);
 		}
 
@@ -275,7 +301,8 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			statusOfRejected = obj.getStatus();
 			emiOfRejected = obj.getEmi();
 			creditScoreOfRejected = obj.getCreditScore();
-			Loan loan = new Loan(loanIdOfRejected, accountIdOfRejected, amountOfRejected, typeOfRejected, tenureOfRejected, roiOfRejected, statusOfRejected, emiOfRejected, creditScoreOfRejected);
+			Loan loan = new Loan(loanIdOfRejected, accountIdOfRejected, amountOfRejected, typeOfRejected,
+					tenureOfRejected, roiOfRejected, statusOfRejected, emiOfRejected, creditScoreOfRejected);
 			reqList.add(loan);
 		}
 
