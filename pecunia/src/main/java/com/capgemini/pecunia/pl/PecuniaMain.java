@@ -39,9 +39,7 @@ public class PecuniaMain {
 	public static void main(String[] args)
 
 			throws PecuniaException, TransactionException, IOException, LoanDisbursalException {
-//
 
-			throws PecuniaException, TransactionException, IOException, LoanDisbursalException, LoginException {
 		try
 		{
 			Login login = new Login("anish@gmail.com","11112345");
