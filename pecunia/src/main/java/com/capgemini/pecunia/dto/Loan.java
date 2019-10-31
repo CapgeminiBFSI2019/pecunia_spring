@@ -1,4 +1,8 @@
 package com.capgemini.pecunia.dto;
+
+import org.springframework.stereotype.Component;
+
+@Component
 public class Loan {
     private int loanId;
     private String accountId;
@@ -9,16 +13,6 @@ public class Loan {
     private String loanStatus;
     private double emi;
     private int creditScore;
-
-  
-
-//    private double salary;
-//	public double getSalary() {
-//		return salary;
-//	}
-//	public void setSalary(double salary) {
-//		this.salary = salary;
-//	}
 
 	/**
 	 * @return the loanId
