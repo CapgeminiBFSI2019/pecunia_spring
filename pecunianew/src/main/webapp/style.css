@@ -1,0 +1,10 @@
+.row {
+    padding-top: 50px;
+}
+.bg{
+    padding-top: 200px;
+    background-image: url("Logo.png");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    
+}

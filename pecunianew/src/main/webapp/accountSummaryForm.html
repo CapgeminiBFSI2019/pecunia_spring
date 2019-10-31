@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Passbook</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <a class="navbar-brand" href="MainPage.html"><i class="fas fa-home text-light mr-2" style="font-size: 24px;"></i>Pecunia</a>
+       
+        <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+									<span class="navbar-toggler-icon"></span>
+								</button>
+        <div id="navbarNavDropdown" class="navbar-collapse collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="passbook.html">Passbook</a>
+                </li>
+
+            </ul>
+            <ul class="navbar-nav">
+               
+                <li class="nav-item">
+                    <form action="logout" method="POST">
+                		<button type="submit" class="btn btn-info">logout</button>
+                	</form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="bg"></div>
+
+      <div class="container">
+        <div class="row ">
+            <h2 class="col-8 offset-2">Account Summary</h2>
+        </div>
+
+        <form action="AccountSummaryServlet">
+
+            <div class="row ">
+                <div class="form-group col-sm-8 offset-sm-2">
+                    <label for="accountID">Enter Account ID: </label>
+                    <input type="text" class="form-control" placeholder="Enter accountID" id="accountID" name="accountID" pattern="[0-9]*" title="12 digit account id" minlength=12 maxlength=12  required>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="form-group col-sm-4 offset-sm-2">
+                    <label for="startDate">Enter start date:</label>
+                    <input type="date" class="form-control" id="startDate" placeholder="Enter start date" name="startDate" required >
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="endDate">Enter end date:</label>
+                    <input type="date" class="form-control" id="endDate" placeholder="Enter end date" name="endDate" required onblur="compare()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset-5">
+                   <center><button type="submit" class="btn btn-info">Submit</button></center> 
+                </div>
+            </div>
+
+        </form>
+    </div>
+     <div aria-live="polite" aria-atomic="true" class="toast-container d-none justify-content-center align-items-center">
+        <div class="toast" id="accountSummary-toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+            <div class="toast-header">
+                <img src="images/warning.png" class="rounded mr-2" alt="..." width="24px" height="24px">
+                <strong class="mr-auto">Error</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body">
+                Invalid input. Enter correctly.
+            </div>
+        </div>
+    </div>
+	<script>
+        // Disable form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            $('#accountSummary-toast').on('hidden.bs.toast', function() {
+                $('.toast-container').removeClass('d-flex');
+                $('.toast-container').addClass('d-none');
+                window.location.href = 'accountSummaryForm.html';
+            });
+
+            $('#accountSummary-toast').on('shown.bs.toast', function() {
+                $('.toast-container').removeClass('d-none');
+                $('.toast-container').addClass('d-flex');
+            });
+            
+        })();
+    </script>
+<script>
+	function compare(){
+		 var startDt = document.getElementById("startDate").value;
+		    var endDt = document.getElementById("endDate").value;
+
+		    if( (new Date(startDt).getDate() == new Date(endDt).getDate()))
+		    {
+		        window.alert("Enter two different dates");
+		    }
+	};
+</script>
+</body>
+
+</html>
