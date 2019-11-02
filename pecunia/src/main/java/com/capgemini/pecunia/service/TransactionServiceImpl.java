@@ -418,11 +418,13 @@ public class TransactionServiceImpl implements TransactionService {
 					}
 				}
 			}
-			return transId;
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 		}
+		logger.info("Transaction Succesful. ID :"+transId);
+		return transId;
 
 	}
 
