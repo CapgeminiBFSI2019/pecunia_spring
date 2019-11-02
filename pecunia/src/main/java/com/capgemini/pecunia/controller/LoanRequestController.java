@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.exception.LoanException;
-import com.capgemini.pecunia.exception.PecuniaException;
-import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.service.LoanService;
 import com.google.gson.JsonObject;
 
@@ -21,23 +19,30 @@ public class LoanRequestController {
 	Loan loan;
 	@Autowired
 	LoanService loanService;
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/LoanRequest")
 	public String Loanrequest(@RequestBody Map<String, Object> requestData) {
+
 		JsonObject dataResponse = new JsonObject();
-		String accountId=requestData.get("accountId").toString();
-		double amount=Double.parseDouble(requestData.get("amount").toString());
-		String type=dataResponse.get("type").toString();
-		int tenure=Integer.parseInt(dataResponse.get("tenure").toString());
-		double roi=Double.parseDouble(dataResponse.get("roi").toString());
-		String loanStatus=dataResponse.get("status").toString();
-		//double emi=Double.parseDouble(dataResponse.get("emi").toString());
-		int creditScore=Integer.parseInt(dataResponse.get("creditScore").toString());
-		
+
+		String accountId = requestData.get("accountId").toString();
+
+		double amount = Double.parseDouble(requestData.get("amount").toString());
+
+		String type = requestData.get("type").toString();
+
+		int tenure = Integer.parseInt(requestData.get("tenure").toString());
+
+		double roi = Double.parseDouble(requestData.get("roi").toString());
+
+			String loanStatus = requestData.get("status").toString();
+
+		int creditScore = Integer.parseInt(requestData.get("creditScore").toString());
+
 		loan.setAccountId(accountId);
 		loan.setAmount(amount);
 		loan.setCreditScore(creditScore);
-		//loan.setEmi(emi);
 		loan.setLoanStatus(loanStatus);
 		loan.setType(type);
 		loan.setTenure(tenure);
@@ -46,7 +51,7 @@ public class LoanRequestController {
 		try {
 			int loanId = loanService.createLoanRequest(loan);
 			dataResponse.addProperty("success", true);
-			dataResponse.addProperty("Transaction Id", loanId);
+			dataResponse.addProperty("Loan Id", loanId);
 			dataResponse.addProperty("message", "Loan Request added succesfully \t" + loanId);
 
 		} catch (LoanException e) {
@@ -56,7 +61,3 @@ public class LoanRequestController {
 		return dataResponse.toString();
 	}
 }
-		
-
-
-
