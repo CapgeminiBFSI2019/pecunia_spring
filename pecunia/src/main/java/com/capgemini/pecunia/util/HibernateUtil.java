@@ -1,5 +1,8 @@
 package com.capgemini.pecunia.util;
 import java.util.Properties;
+import java.util.logging.Level;
+
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -16,7 +19,10 @@ import com.capgemini.pecunia.entity.LoginEntity;
 import com.capgemini.pecunia.entity.TransactionEntity;
 public class HibernateUtil {
 	private static SessionFactory sessionFactory;
+	static Logger logger = Logger.getRootLogger();
     public static SessionFactory getSessionFactory() {
+    	
+    	java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
@@ -26,7 +32,7 @@ public class HibernateUtil {
                 settings.put(Environment.USER, "6IXdRZM9Qz");
                 settings.put(Environment.PASS, "rVzUeu2dGF");
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
-                settings.put(Environment.SHOW_SQL, "true");
+                settings.put(Environment.SHOW_SQL, "false");
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
                 configuration.setProperties(settings);
                 configuration.addAnnotatedClass(AccountEntity.class);
@@ -41,7 +47,7 @@ public class HibernateUtil {
                     .applySettings(configuration.getProperties()).build();
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         }
         return sessionFactory;
