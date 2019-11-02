@@ -32,7 +32,7 @@ public class LoanRequestController {
 
 		String type = requestData.get("type").toString();
 
-		int tenure = Integer.parseInt(requestData.get("tenure").toString());
+		int tenure = (int)Double.parseDouble(requestData.get("tenure").toString());
 
 		double roi = Double.parseDouble(requestData.get("roi").toString());
 
@@ -52,7 +52,7 @@ public class LoanRequestController {
 			int loanId = loanService.createLoanRequest(loan);
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("Loan Id", loanId);
-			dataResponse.addProperty("message", "Loan Request added succesfully \t" + loanId);
+			dataResponse.addProperty("message", "Loan Request added succesfully with Loan Id \t" + loanId);
 
 		} catch (LoanException e) {
 			dataResponse.addProperty("success", false);
