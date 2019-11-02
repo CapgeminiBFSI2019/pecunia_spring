@@ -103,8 +103,6 @@ public class TransactionDAOImpl implements TransactionDAO {
 		return chequeId;
 	}
 
-	
-
 	@Override
 	public int generateTransactionId(Transaction transaction) throws PecuniaException, TransactionException {
 		int transactionId = 0;

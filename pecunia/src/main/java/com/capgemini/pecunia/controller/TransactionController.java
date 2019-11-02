@@ -29,6 +29,10 @@ public class TransactionController {
 	Transaction debitChequeTransaction;
 	@Autowired
 	Cheque debitCheque;
+	@Autowired
+	Transaction debitSlipTransaction;
+	
+	
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/creditCheque")
@@ -106,5 +110,30 @@ public class TransactionController {
 		}
 		return dataResponse.toString();
 	}
+
+
+@CrossOrigin(origins = "http://localhost:4200")
+@PostMapping(path = "/debitSlip")
+public String debitUsingSlip(@RequestBody Map<String, Object> requestData) {
+	JsonObject dataResponse = new JsonObject();
+	String accountNumber = requestData.get("accountNumber").toString();
+	double amount = Double.parseDouble(requestData.get("debitSlipAmount").toString());
+	System.out.println(accountNumber + amount + "\n");
+	debitSlipTransaction.setAmount(amount);
+	debitSlipTransaction.setAccountId(accountNumber);
+//	debitSlip.setAccountNo(accountNumber);
+	
+	try {
+		int transId = transactionService.debitUsingSlip(debitSlipTransaction);
+		dataResponse.addProperty("success", true);
+		dataResponse.addProperty("Transaction Id", transId);
+		dataResponse.addProperty("message", "Amount debited.Trans Id is \t" + transId);
+
+	} catch (TransactionException | PecuniaException e) {
+		dataResponse.addProperty("success", false);
+		dataResponse.addProperty("message", e.getMessage());
+	}
+	return dataResponse.toString();
+}
 
 }

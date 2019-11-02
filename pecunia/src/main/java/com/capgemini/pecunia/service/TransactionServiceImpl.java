@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
@@ -23,8 +24,10 @@ import com.capgemini.pecunia.util.Constants;
 public class TransactionServiceImpl implements TransactionService {
 
 	Logger logger = Logger.getRootLogger();
-	AccountManagementService accManagement = new AccountManagementServiceImpl();
-
+	
+	@Autowired
+	AccountManagementService accManagement;
+	
 	public TransactionServiceImpl() {
 	}
 
@@ -39,17 +42,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 ********************************************************************************************************/
 
 	public double getBalance(Account account) throws TransactionException, PecuniaException {
-//		try {
-//			transactionDAO = new TransactionDAOImpl();
-//			double balance;
-//			balance = transactionDAO.getBalance(account);
-//			return balance;
-//		} catch (Exception e) {
-//
-//			logger.error(ErrorConstants.FETCH_ERROR);
-//			throw new TransactionException(ErrorConstants.FETCH_ERROR);
-//		}
-
 		try {
 			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			double balance;
@@ -75,17 +67,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 ********************************************************************************************************/
 
 	public boolean updateBalance(Account account) throws TransactionException, PecuniaException {
-//		try {
-//			transactionDAO = new TransactionDAOImpl();
-//			boolean success = false;
-//			success = transactionDAO.updateBalance(account);
-//			return success;
-//		} catch (Exception e) {
-//
-//			logger.error(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-//			throw new TransactionException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-//		}
-
 		try {
 			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			boolean success = false;
@@ -110,8 +91,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 		int transId = 0;
 		try {
-
-//			transactionDAO = new TransactionDAOImpl();
 			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			String accId = transaction.getAccountId();
 
@@ -232,6 +211,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 
 		}
+		logger.info("Transaction successfull transId"+transId);
 		return transId;
 
 	}
@@ -438,11 +418,13 @@ public class TransactionServiceImpl implements TransactionService {
 					}
 				}
 			}
-			return transId;
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 		}
+		logger.info("Transaction Succesful. ID :"+transId);
+		return transId;
 
 	}
 
