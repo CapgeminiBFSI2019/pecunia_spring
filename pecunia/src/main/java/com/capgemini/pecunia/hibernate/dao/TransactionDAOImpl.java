@@ -1,5 +1,6 @@
 package com.capgemini.pecunia.hibernate.dao;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -16,6 +17,7 @@ import com.capgemini.pecunia.util.HibernateUtil;
 
 public class TransactionDAOImpl implements TransactionDAO {
 	
+	Logger logger = Logger.getRootLogger();
 	
 	@Override
 	public double getBalance(Account account) throws PecuniaException, TransactionException {
@@ -40,6 +42,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			transaction.commit();
 			session.close();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new PecuniaException(e.getMessage());
 		}
 		return accountBalance;
@@ -66,6 +69,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			tx.commit();
 			session.close();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 		}
 		return balanceUpdated;
@@ -93,12 +97,11 @@ public class TransactionDAOImpl implements TransactionDAO {
 			if (txn != null) {
 				txn.rollback();
 			}
+			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.CHEQUE_INSERTION_ERROR);
 		}
 		return chequeId;
 	}
-
-	
 
 	@Override
 	public int generateTransactionId(Transaction transaction) throws PecuniaException, TransactionException {
@@ -126,6 +129,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			if (txn != null) {
 				txn.rollback();
 			}
+			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.TRANSACTION_INSERTION_ERROR);
 		}
 		return transactionId;

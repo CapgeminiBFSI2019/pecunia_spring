@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
@@ -23,7 +24,9 @@ import com.capgemini.pecunia.util.Constants;
 public class TransactionServiceImpl implements TransactionService {
 
 	Logger logger = Logger.getRootLogger();
-	AccountManagementService accManagement = new AccountManagementServiceImpl();
+	
+	@Autowired
+	AccountManagementService accManagement;
 
 	public TransactionServiceImpl() {
 	}
@@ -39,28 +42,17 @@ public class TransactionServiceImpl implements TransactionService {
 	 ********************************************************************************************************/
 
 	public double getBalance(Account account) throws TransactionException, PecuniaException {
-//		try {
-//			transactionDAO = new TransactionDAOImpl();
-//			double balance;
-//			balance = transactionDAO.getBalance(account);
-//			return balance;
-//		} catch (Exception e) {
-//
-//			logger.error(ErrorConstants.FETCH_ERROR);
-//			throw new TransactionException(ErrorConstants.FETCH_ERROR);
-//		}
-
 		try {
 			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			double balance;
 			balance = transactionDAO.getBalance(account);
 			return balance;
 		} catch (PecuniaException e) {
-			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 		} catch (Exception e) {
 
-			logger.error(ErrorConstants.FETCH_ERROR);
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.FETCH_ERROR);
 		}
 
@@ -75,17 +67,6 @@ public class TransactionServiceImpl implements TransactionService {
 	 ********************************************************************************************************/
 
 	public boolean updateBalance(Account account) throws TransactionException, PecuniaException {
-//		try {
-//			transactionDAO = new TransactionDAOImpl();
-//			boolean success = false;
-//			success = transactionDAO.updateBalance(account);
-//			return success;
-//		} catch (Exception e) {
-//
-//			logger.error(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-//			throw new TransactionException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-//		}
-
 		try {
 			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			boolean success = false;
@@ -93,7 +74,7 @@ public class TransactionServiceImpl implements TransactionService {
 			return success;
 		} catch (Exception e) {
 
-			logger.error(ErrorConstants.UPDATE_ACCOUNT_ERROR);
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
 	}
@@ -110,8 +91,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 		int transId = 0;
 		try {
-
-//			transactionDAO = new TransactionDAOImpl();
 			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			String accId = transaction.getAccountId();
 
@@ -227,7 +206,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException(e.getMessage());
 
 		} catch (Exception e) {
-			
+
 			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 
@@ -344,86 +323,107 @@ public class TransactionServiceImpl implements TransactionService {
 
 			TransactionDAO transactionDAO = new TransactionDAOImpl();
 
-			if ((bankName != Constants.BANK_NAME) && (Arrays.asList(Constants.OTHER_BANK_NAME).contains(bankName))) {
-				// other banks cheque
-				chequeDetail.setStatus(Constants.CHEQUE_STATUS_PENDING);
-				transId = transactionDAO.generateChequeId(chequeDetail);
+			Account account = new Account();
+			account.setId(transaction.getAccountId());
+			Account requestedAccount = accManagement.showAccountDetails(account);
+
+			if (!requestedAccount.getStatus().equals("Active")) {
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			} else {
-				if (!bankName.equals(Constants.BANK_NAME)) {
-					// invalid bank cheque
 
-					logger.error(ErrorConstants.INVALID_BANK_EXCEPTION);
-					throw new TransactionException(ErrorConstants.INVALID_BANK_EXCEPTION);
+				if ((bankName != Constants.BANK_NAME)
+						&& (Arrays.asList(Constants.OTHER_BANK_NAME).contains(bankName))) {
+					// other banks cheque
+					chequeDetail.setStatus(Constants.CHEQUE_STATUS_PENDING);
+					transId = transactionDAO.generateChequeId(chequeDetail);
 				} else {
-					// pecunia cheque
-					if (transaction.getAmount() < Constants.MINIMUM_CHEQUE_AMOUNT
-							|| transaction.getAmount() > Constants.MAXIMUM_CHEQUE_AMOUNT) {
-						// invalid cheque amount
+					if (!bankName.equals(Constants.BANK_NAME)) {
+						// invalid bank cheque
 
-						logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
-						throw new TransactionException(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+						logger.error(ErrorConstants.INVALID_BANK_EXCEPTION);
+						throw new TransactionException(ErrorConstants.INVALID_BANK_EXCEPTION);
 					} else {
-
-						Account beneficiaryAccount = new Account();
-						beneficiaryAccount.setId(transaction.getAccountId());
-
-						Account payeeAccount = new Account();
-						payeeAccount.setId(transaction.getTransFrom());
-
-						beneficiaryBalance = transactionDAO.getBalance(beneficiaryAccount);
-						payeeBalance = transactionDAO.getBalance(payeeAccount);
-
-						if (payeeBalance < transaction.getAmount()) {
-							// cheque bounce
-							chequeDetail.setStatus(Constants.CHEQUE_STATUS_BOUNCED);
-							transId = transactionDAO.generateChequeId(chequeDetail);
+						// pecunia cheque
+						Account payeeAccountObject = new Account();
+						payeeAccountObject.setId(transaction.getTransFrom());
+						Account requestedPayeeAccount = accManagement.showAccountDetails(payeeAccountObject);
+						if (!requestedPayeeAccount.getStatus().equals("Active")) {
+							logger.error(ErrorConstants.ACCOUNT_CLOSED);
+							throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 						} else {
-							chequeDetail.setStatus(Constants.CHEQUE_STATUS_CLEARED);
-							int chequeId = transactionDAO.generateChequeId(chequeDetail);
-							LocalDateTime transDate = LocalDateTime.now();
-							newBeneficiaryBalance = beneficiaryBalance + transaction.getAmount();
-							newPayeeBalance = payeeBalance - transaction.getAmount();
 
-							beneficiaryAccount.setBalance(newBeneficiaryBalance);
-							payeeAccount.setBalance(newPayeeBalance);
+							if (transaction.getAmount() < Constants.MINIMUM_CHEQUE_AMOUNT
+									|| transaction.getAmount() > Constants.MAXIMUM_CHEQUE_AMOUNT) {
+								// invalid cheque amount
 
-							creditTransaction = new Transaction();
-							creditTransaction.setAccountId(transaction.getAccountId());
-							creditTransaction.setType(Constants.TRANSACTION_CREDIT);
-							creditTransaction.setAmount(transaction.getAmount());
-							creditTransaction.setOption(Constants.TRANSACTION_OPTION_CHEQUE);
-							creditTransaction.setChequeId(chequeId);
-							creditTransaction.setTransFrom(transaction.getTransFrom());
-							creditTransaction.setTransTo(Constants.NA);
-							creditTransaction.setClosingBalance(newBeneficiaryBalance);
-							creditTransaction.setTransDate(transDate);
-							
-							debitTransaction = new Transaction();
-							debitTransaction.setAccountId(transaction.getTransFrom());
-							debitTransaction.setType(Constants.TRANSACTION_DEBIT);
-							debitTransaction.setAmount(transaction.getAmount());
-							debitTransaction.setOption(Constants.TRANSACTION_OPTION_CHEQUE);
-							debitTransaction.setChequeId(chequeId);
-							debitTransaction.setTransFrom(Constants.NA);
-							debitTransaction.setTransTo(transaction.getAccountId());
-							debitTransaction.setClosingBalance(newPayeeBalance);
-							debitTransaction.setTransDate(transDate);
-							
-							transId = transactionDAO.generateTransactionId(debitTransaction);
-							transId = transactionDAO.generateTransactionId(creditTransaction);
+								logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+								throw new TransactionException(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+							} else {
 
-							transactionDAO.updateBalance(beneficiaryAccount);
-							transactionDAO.updateBalance(payeeAccount);
+								Account beneficiaryAccount = new Account();
+								beneficiaryAccount.setId(transaction.getAccountId());
+
+								Account payeeAccount = new Account();
+								payeeAccount.setId(transaction.getTransFrom());
+
+								beneficiaryBalance = transactionDAO.getBalance(beneficiaryAccount);
+								payeeBalance = transactionDAO.getBalance(payeeAccount);
+
+								if (payeeBalance < transaction.getAmount()) {
+									// cheque bounce
+									chequeDetail.setStatus(Constants.CHEQUE_STATUS_BOUNCED);
+									transId = transactionDAO.generateChequeId(chequeDetail);
+								} else {
+									chequeDetail.setStatus(Constants.CHEQUE_STATUS_CLEARED);
+									int chequeId = transactionDAO.generateChequeId(chequeDetail);
+									LocalDateTime transDate = LocalDateTime.now();
+									newBeneficiaryBalance = beneficiaryBalance + transaction.getAmount();
+									newPayeeBalance = payeeBalance - transaction.getAmount();
+
+									beneficiaryAccount.setBalance(newBeneficiaryBalance);
+									payeeAccount.setBalance(newPayeeBalance);
+
+									creditTransaction = new Transaction();
+									creditTransaction.setAccountId(transaction.getAccountId());
+									creditTransaction.setType(Constants.TRANSACTION_CREDIT);
+									creditTransaction.setAmount(transaction.getAmount());
+									creditTransaction.setOption(Constants.TRANSACTION_OPTION_CHEQUE);
+									creditTransaction.setChequeId(chequeId);
+									creditTransaction.setTransFrom(transaction.getTransFrom());
+									creditTransaction.setTransTo(Constants.NA);
+									creditTransaction.setClosingBalance(newBeneficiaryBalance);
+									creditTransaction.setTransDate(transDate);
+
+									debitTransaction = new Transaction();
+									debitTransaction.setAccountId(transaction.getTransFrom());
+									debitTransaction.setType(Constants.TRANSACTION_DEBIT);
+									debitTransaction.setAmount(transaction.getAmount());
+									debitTransaction.setOption(Constants.TRANSACTION_OPTION_CHEQUE);
+									debitTransaction.setChequeId(chequeId);
+									debitTransaction.setTransFrom(Constants.NA);
+									debitTransaction.setTransTo(transaction.getAccountId());
+									debitTransaction.setClosingBalance(newPayeeBalance);
+									debitTransaction.setTransDate(transDate);
+
+									transId = transactionDAO.generateTransactionId(debitTransaction);
+									transId = transactionDAO.generateTransactionId(creditTransaction);
+
+									transactionDAO.updateBalance(beneficiaryAccount);
+									transactionDAO.updateBalance(payeeAccount);
+								}
+							}
 						}
 					}
 				}
 			}
-			return transId;
+			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
-			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+			logger.error(e.getMessage());
+			throw new TransactionException(e.getMessage());
 		}
+		logger.info("Transaction Succesful. ID :"+transId);
+		return transId;
 
 	}
 
