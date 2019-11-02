@@ -27,7 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
 	
 	@Autowired
 	AccountManagementService accManagement;
-
+	
 	public TransactionServiceImpl() {
 	}
 
@@ -211,6 +211,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 
 		}
+		logger.info("Transaction successfull transId"+transId);
 		return transId;
 
 	}
