@@ -2,6 +2,8 @@ package com.capgemini.pecunia.dto;
 
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+@Component
 public class Account {
 
 	private String id;
