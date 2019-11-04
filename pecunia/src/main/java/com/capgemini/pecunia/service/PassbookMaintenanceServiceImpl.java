@@ -46,7 +46,8 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			AccountManagementService accountManagementService = new AccountManagementServiceImpl();
 			boolean accountExist = accountManagementService.validateAccountId(account);
 			if (!accountExist) {
-				throw new PassbookException(ErrorConstants.ERROR_VALIDATION);
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 
 			transactionList = pdao.updatePassbook(accountId);
@@ -59,7 +60,9 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			}
 			return transactionList;
 		} catch (Exception e) {
+			logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
 			throw new PassbookException(e.getMessage());
+			
 		}
 	}
 
@@ -85,14 +88,17 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			boolean accountExist = accountManagementService.validateAccountId(account);
 			if(!accountExist)
 			{
-				throw new PassbookException(ErrorConstants.ERROR_VALIDATION);
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		
 			
 			transactionList = pdao.accountSummary(accountId, startDate, endDate);
 			
+			logger.info(LoggerMessage.ACCOUNT_SUMMARY_SUCCESSFUL);
 			return transactionList;
 		} catch (Exception e) {
+			logger.error(LoggerMessage.ACCOUNT_SUMMARY_ERROR);
 			throw new PassbookException(e.getMessage());
 
 }
