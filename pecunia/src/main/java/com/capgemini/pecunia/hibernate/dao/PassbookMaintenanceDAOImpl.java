@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 import org.hibernate.Transaction;
 import com.capgemini.pecunia.entity.TransactionEntity;
 import com.capgemini.pecunia.exception.ErrorConstants;
@@ -13,6 +14,7 @@ import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
 
+@Repository
 public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 	
 	private int transId;

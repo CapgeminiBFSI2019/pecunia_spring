@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 //import org.hibernate.query.Query;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Address;
@@ -24,6 +25,7 @@ import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
 
+@Repository
 public class AccountManagementDAOImpl implements AccountManagementDAO {
 	Logger logger = Logger.getRootLogger();
 

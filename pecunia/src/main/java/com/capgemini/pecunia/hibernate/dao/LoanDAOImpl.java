@@ -2,6 +2,7 @@ package com.capgemini.pecunia.hibernate.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.entity.LoanRequestEntity;
@@ -9,7 +10,7 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
-
+@Repository
 public class LoanDAOImpl implements LoanDAO {
 
 	@Override

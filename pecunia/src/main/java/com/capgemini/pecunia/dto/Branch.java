@@ -1,5 +1,8 @@
 package com.capgemini.pecunia.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Branch {
 	private String id;
 	private String name;

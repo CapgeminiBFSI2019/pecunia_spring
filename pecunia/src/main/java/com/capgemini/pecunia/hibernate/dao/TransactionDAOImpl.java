@@ -3,6 +3,7 @@ package com.capgemini.pecunia.hibernate.dao;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Cheque;
@@ -15,6 +16,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.util.HibernateUtil;
 
+@Repository
 public class TransactionDAOImpl implements TransactionDAO {
 	
 	Logger logger = Logger.getRootLogger();
