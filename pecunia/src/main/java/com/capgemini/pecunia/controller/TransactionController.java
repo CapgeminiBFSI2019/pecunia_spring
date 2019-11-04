@@ -31,6 +31,8 @@ public class TransactionController {
 	Cheque debitCheque;
 	@Autowired
 	Transaction debitSlipTransaction;
+	@Autowired
+	Transaction creditSlipTransaction;
 	
 	
 
@@ -128,6 +130,32 @@ public String debitUsingSlip(@RequestBody Map<String, Object> requestData) {
 		dataResponse.addProperty("success", true);
 		dataResponse.addProperty("Transaction Id", transId);
 		dataResponse.addProperty("message", "Amount debited.Trans Id is \t" + transId);
+
+	} catch (TransactionException | PecuniaException e) {
+		dataResponse.addProperty("success", false);
+		dataResponse.addProperty("message", e.getMessage());
+	}
+	return dataResponse.toString();
+}
+
+
+
+@CrossOrigin(origins = "http://localhost:4200")
+@PostMapping(path = "/creditSlip")
+public String creditUsingSlip(@RequestBody Map<String, Object> requestData) {
+	JsonObject dataResponse = new JsonObject();
+	String accountNumber = requestData.get("accountNumber").toString();
+	double amount = Double.parseDouble(requestData.get("creditSlipAmount").toString());
+	System.out.println(accountNumber + amount + "\n");
+	creditSlipTransaction.setAmount(amount);
+	creditSlipTransaction.setAccountId(accountNumber);
+//	debitSlip.setAccountNo(accountNumber);
+	
+	try {
+		int transId = transactionService.creditUsingSlip(creditSlipTransaction);
+		dataResponse.addProperty("success", true);
+		dataResponse.addProperty("Transaction Id", transId);
+		dataResponse.addProperty("message", "Amount credited.Trans Id is \t" + transId);
 
 	} catch (TransactionException | PecuniaException e) {
 		dataResponse.addProperty("success", false);

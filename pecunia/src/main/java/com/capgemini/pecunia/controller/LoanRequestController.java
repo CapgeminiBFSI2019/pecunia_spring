@@ -22,7 +22,7 @@ public class LoanRequestController {
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/LoanRequest")
-	public String Loanrequest(@RequestBody Map<String, Object> requestData) {
+	public String loanRequest(@RequestBody Map<String, Object> requestData) {
 
 		JsonObject dataResponse = new JsonObject();
 
