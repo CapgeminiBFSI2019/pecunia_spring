@@ -17,6 +17,7 @@ import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.service.AccountManagementService;
 import com.capgemini.pecunia.util.Constants;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 @RestController
@@ -197,5 +198,28 @@ public class AccountController {
 
 		return dataResponse.toString();
 	}
+    
+    @CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/accountDetail")
+    public String showAccountDetails(@RequestBody Map<String, Object> requestData) {
+    	
+    	Gson gson = new Gson();
+    	JsonObject dataResponse = new JsonObject();
+		String accountId = requestData.get("accountId").toString();
+
+		account.setId(accountId);
+		try {
+			
+			Account accountrequested = new Account ();
+			accountrequested = ams.showAccountDetails(accountrequested);
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("message",  gson.toJson(accountrequested, Account.class));
+		}
+		 catch (PecuniaException | AccountException e) {
+				dataResponse.addProperty("success", false);
+				dataResponse.addProperty("message", e.getMessage());
+			}
+		return dataResponse.toString();
+    }
 
 }
