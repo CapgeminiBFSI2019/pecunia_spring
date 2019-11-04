@@ -9,13 +9,8 @@ import com.capgemini.pecunia.exception.LoanException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
 
-public class LoanrequestDAOImpl implements LoanRequestDAO{
+public class LoanrequestDAOImpl implements LoanRequestDAO {
 
-//	@Override
-//	public boolean addLoanDetails(Loan loan) throws PecuniaException, LoanException {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
 	public int addLoanDetails(Loan loan) throws PecuniaException, LoanException {
 		int loanId = 0;
 		org.hibernate.Transaction txn = null;
@@ -27,24 +22,19 @@ public class LoanrequestDAOImpl implements LoanRequestDAO{
 			session.save(loanRequestEntity);
 			loanId = loanRequestEntity.getLoanId();
 			txn.commit();
-			
-		} 
-		catch (Exception e)
-		{
-			if(txn != null)
-			{
+
+		} catch (Exception e) {
+			if (txn != null) {
 				txn.rollback();
 			}
-			
-			System.out.println("LoanDao Error :"+e.getMessage());
+
+			System.out.println("LoanDao Error :" + e.getMessage());
 			e.printStackTrace();
 			throw new PecuniaException(ErrorConstants.LOAN_ADD_ERROR);
 
 		}
-		
+
 		return loanId;
 
-		}
 	}
-
-
+}
