@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Transaction;
@@ -16,6 +17,7 @@ import com.capgemini.pecunia.hibernate.dao.PassbookMaintenanceDAOImpl;
 import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.util.LoggerMessage;
 
+@Service
 public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceService {
 	
 	Logger logger = Logger.getRootLogger();

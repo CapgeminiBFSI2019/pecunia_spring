@@ -2,6 +2,7 @@ package com.capgemini.pecunia.hibernate.dao;
 
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 //import org.hibernate.query.Query;
@@ -20,6 +21,7 @@ import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
 
 public class AccountManagementDAOImpl implements AccountManagementDAO {
+	Logger logger = Logger.getRootLogger();
 
 	@Override
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException {
@@ -39,8 +41,10 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new PecuniaException(ErrorConstants.DELETE_ACCOUNT_ERROR);
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.DELETE_ACCOUNT_ERROR);
 		}
+		
 		return isDeleted;
 	}
 
@@ -65,7 +69,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				acc.setLastUpdated(accountEntity.getLastUpdated());
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
 		}
 		return acc;
@@ -99,6 +103,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new PecuniaException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
 		return isUpdated;
@@ -132,6 +137,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new PecuniaException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
 		return isUpdated;
@@ -172,6 +178,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new PecuniaException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
 		return isUpdated;
@@ -239,6 +246,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
 		}
 		return custId;
@@ -289,6 +297,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			id = Long.toString(oldId + 1);
 
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
 		return id;
@@ -309,6 +318,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ERROR_VALIDATION);
 		}
 		return isValidated;

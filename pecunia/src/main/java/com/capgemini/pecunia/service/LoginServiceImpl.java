@@ -3,6 +3,7 @@ package com.capgemini.pecunia.service;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Login;
 import com.capgemini.pecunia.exception.ErrorConstants;
@@ -10,7 +11,7 @@ import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.LoggerMessage;
 import com.capgemini.pecunia.util.Utility;
-
+@Service
 public class LoginServiceImpl implements LoginService {
 
 	Logger logger = Logger.getRootLogger();
