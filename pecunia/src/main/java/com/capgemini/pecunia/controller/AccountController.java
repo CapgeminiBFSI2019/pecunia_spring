@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,8 @@ public class AccountController {
 
 	@Autowired
 	Account account;
+	@Autowired
+	Account accountrequested;
 	@Autowired
 	Customer customer;
 	@Autowired
@@ -200,20 +203,20 @@ public class AccountController {
 	}
     
     @CrossOrigin(origins = "http://localhost:4200")
-	@PostMapping(path = "/accountDetail")
+	@GetMapping(path = "/accountDetail")
     public String showAccountDetails(@RequestBody Map<String, Object> requestData) {
     	
-    	Gson gson = new Gson();
+//    	Gson gson = new Gson();
     	JsonObject dataResponse = new JsonObject();
 		String accountId = requestData.get("accountId").toString();
 
 		account.setId(accountId);
 		try {
 			
-			Account accountrequested = new Account ();
+			Account accountrequested=new Account();
 			accountrequested = ams.showAccountDetails(accountrequested);
 			dataResponse.addProperty("success", true);
-			dataResponse.addProperty("message",  gson.toJson(accountrequested, Account.class));
+			dataResponse.addProperty("message", accountrequested.getId());
 		}
 		 catch (PecuniaException | AccountException e) {
 				dataResponse.addProperty("success", false);
