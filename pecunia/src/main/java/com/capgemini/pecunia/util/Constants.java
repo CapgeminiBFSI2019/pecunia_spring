@@ -51,5 +51,6 @@ public class Constants {
 	
 	public static final String ACCOUNT_ID = "accountId";
 	public static final String CUSTOMER_ID = "customerId";
+	public static final String ADDRESS_ID = "id";
 
 }
