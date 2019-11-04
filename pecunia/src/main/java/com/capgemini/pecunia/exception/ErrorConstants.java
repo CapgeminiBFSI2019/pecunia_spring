@@ -43,5 +43,6 @@ public class ErrorConstants {
 	public static final String TRANSACTION_AMOUNT_ERROR = "The transaction could not take place";
 	public static final String AMOUNT_EXCEEDS_EXCEPTION = "Maximum amount is 100000";
 	public static final String AMOUNT_LESS_EXCEPTION = "Minimum amount is 100";
+	public static final String FETCH_ACCOUNT_DETAILS= "Error in fetching account details";
 
 }
