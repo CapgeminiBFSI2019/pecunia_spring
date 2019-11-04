@@ -52,4 +52,6 @@ public class Constants {
 	public static final String SHOW_LOAN_DISBURSED_DATA  = "Loan disbursed data has been retrieved"; 
 	public static final String TOTAL_EMI  = "Total EMI has been calculated";
 	public static final String UNIQUE_IDS  = "Unique IDs has been fetched";
+	public static final String ACCOUNT_ID = "accountId";
+	public static final String CUSTOMER_ID = "customerId";
 }

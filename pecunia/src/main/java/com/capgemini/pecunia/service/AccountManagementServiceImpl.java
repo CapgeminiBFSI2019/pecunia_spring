@@ -3,6 +3,7 @@ package com.capgemini.pecunia.service;
 import java.time.LocalDateTime;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
@@ -23,7 +24,11 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public AccountManagementServiceImpl() {
 	}
 
+	@Autowired
 	com.capgemini.pecunia.hibernate.dao.AccountManagementDAO accountDAO;
+	@Autowired
+	AccountManagementService ams;
+	
 
 	/*******************************************************************************************************
 	 * - Function Name : deleteAccount(Account account) - Input Parameters : Account
@@ -40,7 +45,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 			boolean isValidated = validateAccountId(account);
 			if (isValidated) {
-				accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
+				//accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 				isUpdated = accountDAO.deleteAccount(account);
 			} else {
 				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
@@ -69,7 +74,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 			boolean isValidated = validateAccountId(account);
 			if (isValidated) {
-				accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
+				//accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 				isUpdated = accountDAO.updateCustomerName(account, customer);
 			} else {
 				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
@@ -99,7 +104,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 			boolean isValidated = validateAccountId(account);
 			if (isValidated) {
-				accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
+				//accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 				isUpdated = accountDAO.updateCustomerContact(account, customer);
 			} else {
 				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
@@ -128,7 +133,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		try {
 			boolean isValidated = validateAccountId(account);
 			if (isValidated) {
-				accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
+				//accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 				isUpdated = accountDAO.updateCustomerAddress(account, address);
 			} else {
 				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
@@ -170,7 +175,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 				id = id.concat(Constants.CODE_LOAN);
 				break;
 			}
-			accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
+			//accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 			account.setId(id);
 			id = accountDAO.calculateAccountId(account);
 			logger.info(Constants.ACCOUNT_ID_CALCULATED);
@@ -194,10 +199,10 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public boolean validateAccountId(Account account) throws PecuniaException, AccountException {
 		boolean isValidated = false;
 		boolean doesExist = false;
-		accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
+		//accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 		doesExist = accountDAO.validateAccountId(account);
 		if (doesExist) {
-			AccountManagementService ams = new AccountManagementServiceImpl();
+		//	AccountManagementService ams = new AccountManagementServiceImpl();
 			try {
 				Account validAccount = ams.showAccountDetails(account);
 				if (Constants.ACCOUNT_STATUS[0].equals(validAccount.getStatus())) {
@@ -227,7 +232,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public String addAccount(Customer customer, Address address, Account account)
 			throws PecuniaException, AccountException {
 		try {
-			accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
+		//	accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 			String custId = accountDAO.addCustomerDetails(customer, address);
 			account.setHolderId(custId);
 			String accountId = calculateAccountId(account);
@@ -251,7 +256,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
 		Account accountRequested = new Account();
 		try {
-			AccountManagementDAO accountDAO = new AccountManagementDAOImpl();
+			//AccountManagementDAO accountDAO = new AccountManagementDAOImpl();
 
 			accountRequested = accountDAO.showAccountDetails(account);
 		} catch (AccountException | PecuniaException e) {

@@ -3,6 +3,7 @@ package com.capgemini.pecunia.service;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Login;
@@ -16,6 +17,9 @@ public class LoginServiceImpl implements LoginService {
 
 	Logger logger = Logger.getRootLogger();
 
+	@Autowired
+	com.capgemini.pecunia.hibernate.dao.LoginDAO loginDAO;
+	
 	public LoginServiceImpl() {
 
 	}
@@ -32,7 +36,7 @@ public class LoginServiceImpl implements LoginService {
 	public boolean validateEmail(Login login) throws PecuniaException, LoginException {
 		boolean isValidated = false;
 
-		com.capgemini.pecunia.hibernate.dao.LoginDAO loginDAO = new com.capgemini.pecunia.hibernate.dao.LoginDAOImpl();
+		//com.capgemini.pecunia.hibernate.dao.LoginDAO loginDAO = new com.capgemini.pecunia.hibernate.dao.LoginDAOImpl();
 		String password = null;
 		String secretKey = loginDAO.validateEmail(login);
 		if (secretKey == null) {
