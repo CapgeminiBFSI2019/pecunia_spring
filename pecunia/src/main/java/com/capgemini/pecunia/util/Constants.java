@@ -48,5 +48,8 @@ public class Constants {
 	public static final String ACCOUNT_ID_CALCULATED = "Account Id Calculated";
 	public static final String ACCOUNT_ID_VALIDATED = "Account Id Validated";
 	public static final String SHOW_ACCOUNT_DETAILS = "Account details fetched successfully";
-
+	public static final String[] SHOW_LOAN_REQUESTS = {"All loan requests has been retrieved", "All accepted loan requests has been retrieved", "All rejected loan requests has been retrieved"} ; 
+	public static final String SHOW_LOAN_DISBURSED_DATA  = "Loan disbursed data has been retrieved"; 
+	public static final String TOTAL_EMI  = "Total EMI has been calculated";
+	public static final String UNIQUE_IDS  = "Unique IDs has been fetched";
 }
