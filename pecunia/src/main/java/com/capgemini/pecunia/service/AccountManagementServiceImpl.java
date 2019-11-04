@@ -76,6 +76,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			if (isValidated) {
 				//accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 				isUpdated = accountDAO.updateCustomerName(account, customer);
+				System.out.println("isUpdated: "+isUpdated);
 			} else {
 				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);

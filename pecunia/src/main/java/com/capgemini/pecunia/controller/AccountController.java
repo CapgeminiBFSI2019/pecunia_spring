@@ -214,9 +214,9 @@ public class AccountController {
 		account.setId(accountId);
 		try {
 			
-			Account accountrequested=new Account();
-			accountrequested = ams.showAccountDetails(accountrequested);
-			String jsonInString = gson.toJson(accountrequested);
+			//Account accountrequested=new Account();
+			account = ams.showAccountDetails(account);
+			String jsonInString = gson.toJson(account);
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("data", jsonInString);
 			dataResponse.addProperty("message", accountId.toString());

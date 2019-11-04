@@ -1,13 +1,15 @@
 package com.capgemini.pecunia.hibernate.dao;
 
 import java.sql.SQLException;
-import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 //import org.hibernate.query.Query;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -21,7 +23,6 @@ import com.capgemini.pecunia.entity.CustomerEntity;
 import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
-import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
 
@@ -54,6 +55,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isDeleted;
 	}
 
+	@Override
 	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
 
 		Account acc = new Account();
@@ -85,29 +87,25 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	@Override
 	public boolean updateCustomerName(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
-		org.hibernate.Transaction tx = null;
 		String custId = null;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			@SuppressWarnings("deprecation")
-			Criteria criteria = session.createCriteria(AccountEntity.class)
-				    .add(Restrictions.eq(Constants.ACCOUNT_ID, account.getId()));
-			criteria.setMaxResults(1);
-			List<AccountEntity> list = criteria.list();
-			for(AccountEntity acc : list) {
-				custId= acc.getCustomerId();
-			}
-			tx = session.beginTransaction();
-			CustomerEntity customerEntity = session.load(CustomerEntity.class, custId);
-			customerEntity.setName(customer.getName());
-			session.update(customerEntity);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<AccountEntity> cr = cb.createQuery(AccountEntity.class);
+			Root<AccountEntity> root = cr.from(AccountEntity.class);
+			cr.select(root).where(cb.equal(root.get(Constants.ACCOUNT_ID), account.getId()));
+			Query<AccountEntity> q = session.createQuery(cr);
+			AccountEntity acc = q.getSingleResult();
+			custId = acc.getCustomerId();
+			CriteriaUpdate<CustomerEntity> criteriaUpdate = cb.createCriteriaUpdate(CustomerEntity.class);
+			Root<CustomerEntity> rootNew = criteriaUpdate.from(CustomerEntity.class);
+			criteriaUpdate.set("name", customer.getName());
+			criteriaUpdate.where(cb.equal(rootNew.get(Constants.CUSTOMER_ID), custId));
 
-			if (customer.getName().equals(customerEntity.getName())) {
-				isUpdated = true;
-			} else {
-				throw new PecuniaException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-			}
-			tx.commit();
+			Transaction transaction = session.beginTransaction();
+			session.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+			isUpdated = true;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
@@ -119,30 +117,25 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	@Override
 	public boolean updateCustomerContact(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
-		org.hibernate.Transaction tx = null;
 		String custId = null;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			@SuppressWarnings("deprecation")
-			Criteria criteria = session.createCriteria(AccountEntity.class)
-		    .add(Restrictions.eq(Constants.ACCOUNT_ID, account.getId()));
-			criteria.setMaxResults(1);
-			@SuppressWarnings("unchecked")
-			List<AccountEntity> list = criteria.list();
-			for(AccountEntity acc : list) {
-				custId= acc.getCustomerId();
-			}
-			tx = session.beginTransaction();
-			CustomerEntity customerEntity = session.load(CustomerEntity.class, custId);
-			customerEntity.setContact(customer.getContact());
-			session.update(customerEntity);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<AccountEntity> cr = cb.createQuery(AccountEntity.class);
+			Root<AccountEntity> root = cr.from(AccountEntity.class);
+			cr.select(root).where(cb.equal(root.get(Constants.ACCOUNT_ID), account.getId()));
+			Query<AccountEntity> q = session.createQuery(cr);
+			AccountEntity acc = q.getSingleResult();
+			custId = acc.getCustomerId();
+			CriteriaUpdate<CustomerEntity> criteriaUpdate = cb.createCriteriaUpdate(CustomerEntity.class);
+			Root<CustomerEntity> rootNew = criteriaUpdate.from(CustomerEntity.class);
+			criteriaUpdate.set("contact", customer.getContact());
+			criteriaUpdate.where(cb.equal(rootNew.get(Constants.CUSTOMER_ID), custId));
 
-			if (customer.getContact().equals(customerEntity.getContact())) {
-				isUpdated = true;
-			} else {
-				throw new PecuniaException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-			}	
-			tx.commit();
+			Transaction transaction = session.beginTransaction();
+			session.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+			isUpdated = true;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
@@ -154,49 +147,39 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	@Override
 	public boolean updateCustomerAddress(Account account, Address address) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
-		String custId=null;
+		String custId = null;
 		String addrId = null;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			@SuppressWarnings("deprecation")
-			Criteria criteria = session.createCriteria(AccountEntity.class)
-		    .add(Restrictions.eq(Constants.ACCOUNT_ID, account.getId()));
-			criteria.setMaxResults(1);
-			@SuppressWarnings("unchecked")
-			List<AccountEntity> list = criteria.list();
-			for(AccountEntity acc : list) {
-				custId= acc.getCustomerId();
-				@SuppressWarnings("deprecation")
-				Criteria criteria1 = session.createCriteria(CustomerEntity.class)
-			    .add(Restrictions.eq(Constants.CUSTOMER_ID, custId));
-				criteria1.setMaxResults(1);
-				@SuppressWarnings("unchecked")
-				List<CustomerEntity> listCustomer = criteria1.list();
-				for(CustomerEntity cust: listCustomer) {
-					addrId = cust.getAddressId();
-				}
-			}
-
-			Transaction txn = session.beginTransaction();
-			AddressEntity addressEntity = session.load(AddressEntity.class, addrId);
-			addressEntity.setAddressLine1(address.getLine1());
-			addressEntity.setAddressLine2(address.getLine2());
-			addressEntity.setCity(address.getCity());
-			addressEntity.setState(address.getState());
-			addressEntity.setCountry(address.getCountry());
-			addressEntity.setZipcode(address.getZipcode());
-			session.update(addressEntity);
-
-			if (address.getLine1().equals(addressEntity.getAddressLine1()) && 
-					address.getLine2().equals(addressEntity.getAddressLine2()) && address.getCity().equals(addressEntity.getCity()) &&
-					address.getState().equals(addressEntity.getState()) && address.getCountry().equals(addressEntity.getCountry()) &&
-					address.getZipcode().equals(addressEntity.getZipcode())) {
-				isUpdated = true;
-			} else {
-				throw new PecuniaException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-			}	
-			txn.commit();
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<AccountEntity> cr = cb.createQuery(AccountEntity.class);
+			Root<AccountEntity> root = cr.from(AccountEntity.class);
+			cr.select(root).where(cb.equal(root.get(Constants.ACCOUNT_ID), account.getId()));
+			Query<AccountEntity> q = session.createQuery(cr);
+			AccountEntity acc = q.getSingleResult();
+			custId = acc.getCustomerId();
+			CriteriaBuilder cb2 = session.getCriteriaBuilder();
+			CriteriaQuery<CustomerEntity> cr2 = cb2.createQuery(CustomerEntity.class);
+			Root<CustomerEntity> root2 = cr2.from(CustomerEntity.class);
+			cr2.select(root2).where(cb2.equal(root2.get(Constants.CUSTOMER_ID), custId));
+			Query<CustomerEntity> q2 = session.createQuery(cr2);
+			CustomerEntity cust = q2.getSingleResult();
+			addrId = cust.getAddressId();
+			CriteriaUpdate<AddressEntity> criteriaUpdate = cb.createCriteriaUpdate(AddressEntity.class);
+			Root<AddressEntity> rootNew = criteriaUpdate.from(AddressEntity.class);
+			criteriaUpdate.set("addressLine1", address.getLine1());
+			criteriaUpdate.set("addressLine2", address.getLine2());
+			criteriaUpdate.set("city", address.getCity());
+			criteriaUpdate.set("state", address.getState());
+			criteriaUpdate.set("country", address.getCountry());
+			criteriaUpdate.set("zipcode", address.getZipcode());
+			criteriaUpdate.where(cb.equal(rootNew.get(Constants.ADDRESS_ID), addrId));
+			Transaction transaction = session.beginTransaction();
+			session.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+			isUpdated = true;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
@@ -209,7 +192,6 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	public String addCustomerDetails(Customer customer, Address address)
 			throws PecuniaException, AccountException, SQLException {
 		String addrId = null;
-
 		String custId = null;
 		CustomerEntity cust = new CustomerEntity();
 		AddressEntity addr = new AddressEntity();
@@ -224,6 +206,20 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		session.save(addr);
 		session.getTransaction().commit();
 		try {
+//			@SuppressWarnings("deprecation")
+//			Criteria criteria = session.createCriteria(AddressEntity.class).setProjection(Projections.max("id"));
+//			criteria.setMaxResults(1);
+//			@SuppressWarnings("unchecked")
+//			List<AddressEntity> list = criteria.list();
+//			if(list!=null) {
+//				for(AddressEntity addressObj : list) {
+//					addrId= (String) addressObj.getId();
+//				}
+//			}
+//			else {
+//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
+//			}
+//			
 			String hql = "SELECT MAX(id) FROM AddressEntity";
 			Query query = session.createQuery(hql);
 
@@ -237,7 +233,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
 		}
 
@@ -253,7 +249,19 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		session.save(cust);
 		session.getTransaction().commit();
 		try {
-
+//			@SuppressWarnings("deprecation")
+//			Criteria criteria = session.createCriteria(CustomerEntity.class).setProjection(Projections.max("customerId"));
+//			criteria.setMaxResults(1);
+//			@SuppressWarnings("unchecked")
+//			List<CustomerEntity> list = criteria.list();
+//			if(list!=null) {
+//				for(CustomerEntity custObj : list) {
+//					custId = (String) custObj.getCustomerId();
+//				}
+//			}
+//			else {
+//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
+//			}
 			String hql1 = "SELECT MAX(customerId) FROM CustomerEntity";
 			Query query = session.createQuery(hql1);
 
@@ -267,6 +275,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
 		}
