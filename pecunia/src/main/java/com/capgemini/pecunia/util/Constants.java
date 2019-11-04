@@ -44,8 +44,8 @@ public class Constants {
 	public static final String UPDATE_CONTACT_SUCCESSFUL = "Customer Contact Updated Successfully";
 	public static final String UPDATE_ADDRESS_SUCCESSFUL = "Customer Address Updated Successfully";
 	public static final String DELETE_ACCOUNT_SUCCESSFUL = "Account Deleted Successfully";
-	
-	
-	
+	public static final String ADD_ACCOUNT_SUCCESSFUL = "Account Added Successfully";
+	public static final String ACCOUNT_ID_CALCULATED = "Account Id Calculated";
+	public static final String ACCOUNT_ID_VALIDATED = "Account Id Validated";
 
 }
