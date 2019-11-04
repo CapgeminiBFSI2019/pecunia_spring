@@ -1,14 +1,18 @@
 package com.capgemini.pecunia.service;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.exception.LoanException;
 
+
 @Service
 public class LoanServiceImpl implements LoanService {
+	
 
+	Logger logger = Logger.getRootLogger();
 	/*******************************************************************************************************
 	 * -Function Name : calculateEMI(double amount, int tenure, double roi) -Input
 	 * Parameters : double amount, int tenure, double roi -Return Type : double
@@ -42,9 +46,13 @@ public class LoanServiceImpl implements LoanService {
 			isValidAccount = accountManagementService.validateAccountId(account);
 			if (isValidAccount) {
 				loanId = loanDao.addLoanDetails(loan);
+				logger.info("Loan details dal gaya");
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new LoanException(e.getMessage());
+			
+
 		}
 		return loanId;	
 

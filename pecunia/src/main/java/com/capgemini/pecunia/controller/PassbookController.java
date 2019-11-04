@@ -27,6 +27,8 @@ public class PassbookController {
 	PassbookMaintenanceService Passbook;
 	@Autowired
 	PassbookMaintenanceService account;
+	@Autowired
+	Transaction updatePassbook;
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/accountSummary")
@@ -68,4 +70,43 @@ public class PassbookController {
 		
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/updatePassbook")
+	public String updatePassbook(@RequestBody Map<String, Object> requestData) {
+		
+		String accountID = requestData.get("accountID").toString();
+				
+		JsonArray jsonArray = new JsonArray();
+	
+		Gson gson = new Gson();
+	
+		JsonObject dataResponse = new JsonObject();
+
+
+		try {
+			List<Transaction> passbookUpdate = account.updatePassbook(accountID);
+			if (passbookUpdate.size() > 0) {
+				for (Transaction transaction : passbookUpdate) {
+					jsonArray.add(gson.toJson(transaction, Transaction.class));
+				}
+			System.out.println("json array" + jsonArray);	
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("message", "Passbook \t");
+			dataResponse.add("data", jsonArray);
+			} else {
+				dataResponse.addProperty("success", true);
+				dataResponse.addProperty("message", "No recent transaction to be displayed");
+			}
+			
+		} catch (PassbookException | PecuniaException e) {
+			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("message", e.getMessage());
+		}
+		return dataResponse.toString();
+		
+		
+	}
+	
+	
+	
 }

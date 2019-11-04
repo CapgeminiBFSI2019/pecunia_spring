@@ -24,6 +24,7 @@ public class LoanrequestDAOImpl implements LoanRequestDAO {
 			session.save(loanRequestEntity);
 			loanId = loanRequestEntity.getLoanId();
 			txn.commit();
+		
 
 		} catch (Exception e) {
 			if (txn != null) {

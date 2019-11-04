@@ -44,7 +44,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.DELETE_ACCOUNT_ERROR);
 		}
-		
+		logger.info(Constants.DELETE_ACCOUNT_SUCCESSFUL);
 		return isDeleted;
 	}
 
@@ -72,6 +72,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
 		}
+		logger.info(Constants.SHOW_ACCOUNT_DETAILS);
 		return acc;
 	}
 
@@ -106,6 +107,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
+		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -140,6 +142,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
+		logger.info(Constants.UPDATE_CONTACT_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -181,6 +184,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
+		logger.info(Constants.UPDATE_ADDRESS_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -249,6 +253,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
 		}
+		logger.info(Constants.ADD_ACCOUNT_SUCCESSFUL);
 		return custId;
 
 	}
@@ -274,6 +279,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		acc.setCustomerId(account.getHolderId());
 		session.save(acc);
 		txn.commit();
+		logger.info(Constants.ADD_ACCOUNT_SUCCESSFUL);
 		return account.getId();
 	}
 
@@ -300,6 +306,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
+		logger.info(Constants.ACCOUNT_ID_CALCULATED);
 		return id;
 	}
 
@@ -321,6 +328,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ERROR_VALIDATION);
 		}
+		logger.info(Constants.ACCOUNT_ID_VALIDATED);
 		return isValidated;
 	}
 
