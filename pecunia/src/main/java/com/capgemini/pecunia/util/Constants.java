@@ -47,5 +47,6 @@ public class Constants {
 	public static final String ADD_ACCOUNT_SUCCESSFUL = "Account Added Successfully";
 	public static final String ACCOUNT_ID_CALCULATED = "Account Id Calculated";
 	public static final String ACCOUNT_ID_VALIDATED = "Account Id Validated";
+	public static final String SHOW_ACCOUNT_DETAILS = "Account details fetched successfully";
 
 }
