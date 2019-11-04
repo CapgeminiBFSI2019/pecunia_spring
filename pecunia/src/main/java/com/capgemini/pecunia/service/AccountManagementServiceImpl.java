@@ -27,7 +27,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	@Autowired
 	com.capgemini.pecunia.hibernate.dao.AccountManagementDAO accountDAO;
 	@Autowired
-	AccountManagementService ams;
+	AccountManagementService accManagementService;
 	
 
 	/*******************************************************************************************************
@@ -205,7 +205,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		if (doesExist) {
 		//	AccountManagementService ams = new AccountManagementServiceImpl();
 			try {
-				Account validAccount = ams.showAccountDetails(account);
+				Account validAccount = accManagementService.showAccountDetails(account);
 				if (Constants.ACCOUNT_STATUS[0].equals(validAccount.getStatus())) {
 					isValidated = true;
 				} else {

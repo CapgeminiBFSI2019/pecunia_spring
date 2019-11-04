@@ -29,19 +29,21 @@ public class TransactionDAOImpl implements TransactionDAO {
 		try {
 			String accountId = account.getId();
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			transaction = session.beginTransaction();
-			@SuppressWarnings("rawtypes")
-			Query query = session.createNamedQuery("AccountEntity.getBalanceById");
-			query.setParameter("accountId", accountId);
-			query.setMaxResults(1);
-			AccountEntity accountEntity = (AccountEntity) query.uniqueResult();
+//			transaction = session.beginTransaction();
+//			@SuppressWarnings("rawtypes")
+//			Query query = session.createNamedQuery("AccountEntity.getBalanceById");
+//			query.setParameter("accountId", accountId);
+			
+//			query.setMaxResults(1);
+//			AccountEntity accountEntity = (AccountEntity) query.uniqueResult();
+			AccountEntity accountEntity = (AccountEntity) session.load(AccountEntity.class,accountId);
 			if (accountEntity != null) {
 				accountBalance = accountEntity.getBalance();
 			} else {
 				throw new PecuniaException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 
-			transaction.commit();
+//			transaction.commit();
 			session.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage());

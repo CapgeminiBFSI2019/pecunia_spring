@@ -26,7 +26,7 @@ import com.google.gson.JsonObject;
 public class AccountController {
 
 	@Autowired
-	AccountManagementService ams;
+	AccountManagementService accManagementService;
 
 	@Autowired
 	Account account;
@@ -50,7 +50,7 @@ public class AccountController {
 		boolean updated = false;
 
 		try {
-			updated = ams.updateCustomerName(account, customer);
+			updated = accManagementService.updateCustomerName(account, customer);
 			if (updated) {
 				dataResponse.addProperty("success", true);
 				dataResponse.addProperty("message", Constants.UPDATE_NAME_SUCCESSFUL);
@@ -75,7 +75,7 @@ public class AccountController {
 		boolean updated = false;
 
 		try {
-			updated = ams.updateCustomerContact(account, customer);
+			updated = accManagementService.updateCustomerContact(account, customer);
 			if (updated) {
 				dataResponse.addProperty("success", true);
 				dataResponse.addProperty("message", Constants.UPDATE_CONTACT_SUCCESSFUL);
@@ -111,7 +111,7 @@ public class AccountController {
 		boolean updated = false;
 
 		try {
-			updated = ams.updateCustomerAddress(account, address);
+			updated = accManagementService.updateCustomerAddress(account, address);
 			if (updated) {
 				dataResponse.addProperty("success", true);
 				dataResponse.addProperty("message", Constants.UPDATE_ADDRESS_SUCCESSFUL);
@@ -166,7 +166,7 @@ public class AccountController {
 		account.setBalance(accountbalance);
 		account.setInterest(accountinterest);
 		try {
-			String created = ams.addAccount(customer, address, account);
+			String created = accManagementService.addAccount(customer, address, account);
 			if (created != null) {
 				dataResponse.addProperty("success", true);
 				dataResponse.addProperty("Account Id", created);
@@ -190,7 +190,7 @@ public class AccountController {
 
 		account.setId(accountId);
 		try {
-			boolean isDeleted = ams.deleteAccount(account);
+			boolean isDeleted = accManagementService.deleteAccount(account);
 			if (isDeleted) {
 				dataResponse.addProperty("success", true);
 				dataResponse.addProperty("message", Constants.DELETE_ACCOUNT_SUCCESSFUL);
@@ -215,7 +215,7 @@ public class AccountController {
 		try {
 			
 			//Account accountrequested=new Account();
-			account = ams.showAccountDetails(account);
+			account = accManagementService.showAccountDetails(account);
 			String jsonInString = gson.toJson(account);
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("data", jsonInString);

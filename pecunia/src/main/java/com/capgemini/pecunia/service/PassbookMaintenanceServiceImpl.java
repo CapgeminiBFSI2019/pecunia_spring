@@ -22,7 +22,7 @@ import com.capgemini.pecunia.util.LoggerMessage;
 public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceService {
 	
 	@Autowired
-	PassbookMaintenanceDAO pdao;
+	PassbookMaintenanceDAO passbookDAO;
 	@Autowired
 	AccountManagementService accountManagementService;
 	
@@ -57,10 +57,10 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 
-			transactionList = pdao.updatePassbook(accountId);
+			transactionList = passbookDAO.updatePassbook(accountId);
 			boolean ans = false;
 			if (transactionList.size() > 0) {
-				ans = pdao.updateLastUpdated(accountId);
+				ans = passbookDAO.updateLastUpdated(accountId);
 				if (ans) {
 					logger.info(LoggerMessage.UPDATE_PASSBOOK_SUCCESSFUL);
 				}
@@ -100,7 +100,7 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			}
 		
 			
-			transactionList = pdao.accountSummary(accountId, startDate, endDate);
+			transactionList = passbookDAO.accountSummary(accountId, startDate, endDate);
 			
 			logger.info(LoggerMessage.ACCOUNT_SUMMARY_SUCCESSFUL);
 			return transactionList;
