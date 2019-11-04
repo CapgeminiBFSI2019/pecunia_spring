@@ -14,7 +14,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.hibernate.dao.AccountManagementDAO;
 import com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl;
 import com.capgemini.pecunia.util.Constants;
-import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
+
 @Service
 public class AccountManagementServiceImpl implements AccountManagementService {
 

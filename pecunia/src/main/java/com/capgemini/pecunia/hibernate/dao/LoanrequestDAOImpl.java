@@ -1,5 +1,6 @@
 package com.capgemini.pecunia.hibernate.dao;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.capgemini.pecunia.dto.Loan;
@@ -10,6 +11,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
 
 public class LoanrequestDAOImpl implements LoanRequestDAO {
+	Logger logger=Logger.getRootLogger();
 
 	public int addLoanDetails(Loan loan) throws PecuniaException, LoanException {
 		int loanId = 0;
@@ -30,6 +32,7 @@ public class LoanrequestDAOImpl implements LoanRequestDAO {
 
 			System.out.println("LoanDao Error :" + e.getMessage());
 			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.LOAN_ADD_ERROR);
 
 		}

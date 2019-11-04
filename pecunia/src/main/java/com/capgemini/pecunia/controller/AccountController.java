@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.service.AccountManagementService;
 import com.capgemini.pecunia.util.Constants;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 @RestController
@@ -27,6 +29,8 @@ public class AccountController {
 
 	@Autowired
 	Account account;
+	@Autowired
+	Account accountrequested;
 	@Autowired
 	Customer customer;
 	@Autowired
@@ -197,5 +201,28 @@ public class AccountController {
 
 		return dataResponse.toString();
 	}
+    
+    @CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping(path = "/accountDetail")
+    public String showAccountDetails(@RequestBody Map<String, Object> requestData) {
+    	
+//    	Gson gson = new Gson();
+    	JsonObject dataResponse = new JsonObject();
+		String accountId = requestData.get("accountId").toString();
+
+		account.setId(accountId);
+		try {
+			
+			Account accountrequested=new Account();
+			accountrequested = ams.showAccountDetails(accountrequested);
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("message", accountrequested.getId());
+		}
+		 catch (PecuniaException | AccountException e) {
+				dataResponse.addProperty("success", false);
+				dataResponse.addProperty("message", e.getMessage());
+			}
+		return dataResponse.toString();
+    }
 
 }
