@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -20,9 +21,11 @@ import com.capgemini.pecunia.entity.LoanRequestEntity;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanDisbursalException;
 import com.capgemini.pecunia.exception.PecuniaException;
+import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
 
 public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
+	Logger logger = Logger.getRootLogger();
 
 	private int loanId;
 	private String accountId;
@@ -74,8 +77,10 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			List<LoanRequestEntity> results = query.list();
 			reqList = loanRequests(results);
 		} catch (Exception e) {
+			logger.error(ErrorConstants.NO_LOAN_REQUESTS);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 		}
+		logger.info(Constants.SHOW_LOAN_REQUESTS[0]);
 		return reqList;
 	}
 
@@ -94,8 +99,10 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			reqList = acceptedLoanRequests(results);
 
 		} catch (Exception e) {
+			logger.error(ErrorConstants.NO_LOAN_REQUESTS);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 		}
+		logger.info(Constants.SHOW_LOAN_REQUESTS[1]);
 		return reqList;
 	}
 
@@ -113,8 +120,10 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			List<LoanRequestEntity> results = query.list();
 			reqList = rejectedLoanRequests(results);
 		} catch (Exception e) {
+			logger.error(ErrorConstants.NO_LOAN_REQUESTS);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 		}
+		logger.info(Constants.SHOW_LOAN_REQUESTS[2]);
 		return reqList;
 	}
 
@@ -149,8 +158,10 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			List<LoanDisbursalEntity> results = query.list();
 			reqList = loanDisbursal(results);
 		} catch (Exception e) {
-			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
+			logger.error(ErrorConstants.NO_LOAN_DISBURSAL_DATA);
+			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_DISBURSAL_DATA);
 		}
+		logger.info(Constants.SHOW_LOAN_DISBURSED_DATA);
 		return reqList;
 	}
 
@@ -168,7 +179,8 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			tx.commit();
 
 		} catch (Exception e) {
-			throw new LoanDisbursalException(e.getMessage());
+			logger.error(ErrorConstants.NO_BALANCE_UPDATE);
+			throw new LoanDisbursalException(ErrorConstants.NO_BALANCE_UPDATE);
 		}
 
 	}
@@ -188,7 +200,8 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			tx.commit();
 
 		} catch (Exception e) {
-			throw new LoanDisbursalException(e.getMessage());
+			logger.error(ErrorConstants.NO_LOAN_STATUS_UPDATE);
+			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_STATUS_UPDATE);
 		}
 
 	}
@@ -204,8 +217,10 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			TypedQuery<Double> query = session.createQuery(cr);
 			totalEMI = query.getSingleResult();
 		} catch (Exception e) {
-			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
+			logger.error(ErrorConstants.NO_TOTAL_EMI);
+			throw new LoanDisbursalException(ErrorConstants.NO_TOTAL_EMI);
 		}
+		logger.info(Constants.TOTAL_EMI);
 		return totalEMI;
 
 	}
@@ -223,8 +238,10 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			List<LoanRequestEntity> results = query.list();
 			reqList = acceptedLoanRequests(results);
 		} catch (Exception e) {
+			logger.error(ErrorConstants.NO_LOAN_REQUESTS);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 		}
+		logger.info(Constants.SHOW_LOAN_REQUESTS[1]);
 		return reqList;
 	}
 
@@ -243,8 +260,10 @@ public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
 			}
 
 		} catch (Exception e) {
-			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
+			logger.error(ErrorConstants.NO_UNIQUE_IDS);
+			throw new LoanDisbursalException(ErrorConstants.NO_UNIQUE_IDS);
 		}
+		logger.info(Constants.UNIQUE_IDS);
 		return accountId;
 	}
 

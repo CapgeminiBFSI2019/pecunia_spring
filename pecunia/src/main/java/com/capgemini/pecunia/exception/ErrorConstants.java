@@ -32,7 +32,12 @@ public class ErrorConstants {
 
 	public static final String CONNECTION_FAILURE = "Connection problem. Cannot connect to the database";
 	public static final String FILE_CLOSING_FAILURE = "Files cannot be closed";
-	public static final String NO_LOAN_REQUESTS = "No loan request is present in database";
+	public static final String NO_LOAN_REQUESTS = "Loan request retrieval is unsuccessful";
+	public static final String NO_LOAN_DISBURSAL_DATA = "Loan disbursal data retrieval is unsuccessful";
+	public static final String NO_BALANCE_UPDATE = "Balance updation is unsuccessful";
+	public static final String NO_LOAN_STATUS_UPDATE = "Loan status updation is unsuccessful";
+	public static final String NO_TOTAL_EMI = "Retrieval of total EMI is unsuccessful";
+	public static final String NO_UNIQUE_IDS = "No unique IDs has been fetched";
 
 	public static final String INVALID_ACCOUNT_EXCEPTION = "Invalid Account Number";
 	public static final String INVALID_BANK_EXCEPTION = "Bank doesn't exist. ";
