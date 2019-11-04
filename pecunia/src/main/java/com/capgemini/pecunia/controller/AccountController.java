@@ -216,7 +216,7 @@ public class AccountController {
 			Account accountrequested=new Account();
 			accountrequested = ams.showAccountDetails(accountrequested);
 			dataResponse.addProperty("success", true);
-			dataResponse.addProperty("message", accountrequested.getId());
+			dataResponse.addProperty("message", accountId.toString());
 		}
 		 catch (PecuniaException | AccountException e) {
 				dataResponse.addProperty("success", false);
