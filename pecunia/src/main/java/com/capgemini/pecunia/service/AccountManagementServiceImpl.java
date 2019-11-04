@@ -14,6 +14,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.hibernate.dao.AccountManagementDAO;
 import com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl;
 import com.capgemini.pecunia.util.Constants;
+import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 @Service
 public class AccountManagementServiceImpl implements AccountManagementService {
 
@@ -49,6 +50,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
 		}
+		logger.info(Constants.DELETE_ACCOUNT_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -78,6 +80,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			logger.error(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 			throw new AccountException(e.getMessage());
 		}
+		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -106,6 +109,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
 		}
+		logger.info(Constants.UPDATE_CONTACT_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -134,6 +138,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
 		}
+		logger.info(Constants.UPDATE_ADDRESS_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -168,6 +173,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			accountDAO = new com.capgemini.pecunia.hibernate.dao.AccountManagementDAOImpl();
 			account.setId(id);
 			id = accountDAO.calculateAccountId(account);
+			logger.info(Constants.ACCOUNT_ID_CALCULATED);
 			return id;
 		} catch (Exception e) {
 			logger.error(ErrorConstants.TECH_ERROR);
@@ -194,7 +200,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			AccountManagementService ams = new AccountManagementServiceImpl();
 			try {
 				Account validAccount = ams.showAccountDetails(account);
-				if ("Active".equals(validAccount.getStatus())) {
+				if (Constants.ACCOUNT_STATUS[0].equals(validAccount.getStatus())) {
 					isValidated = true;
 				} else {
 					throw new AccountException(ErrorConstants.ACCOUNT_CLOSED);
@@ -205,6 +211,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			}
 
 		}
+		logger.info(Constants.ACCOUNT_ID_VALIDATED);
 		return isValidated;
 	}
 
@@ -231,6 +238,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 				logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
 				throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 			}
+			logger.info(Constants.ADD_ACCOUNT_SUCCESSFUL);
 			return accountId;
 		} catch (Exception e) {
 			logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
