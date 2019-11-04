@@ -1,6 +1,7 @@
 package com.capgemini.pecunia.service;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
@@ -12,6 +13,12 @@ import com.capgemini.pecunia.exception.LoanException;
 public class LoanServiceImpl implements LoanService {
 	
 
+	@Autowired
+	com.capgemini.pecunia.hibernate.dao.LoanDAO loanDao;
+	
+	@Autowired
+	AccountManagementService accountManagementService;
+	
 	Logger logger = Logger.getRootLogger();
 	/*******************************************************************************************************
 	 * -Function Name : calculateEMI(double amount, int tenure, double roi) -Input
@@ -37,12 +44,12 @@ public class LoanServiceImpl implements LoanService {
 	public int createLoanRequest(Loan loan) throws LoanException {
 
 		boolean isValidAccount = false;
-		com.capgemini.pecunia.hibernate.dao.LoanDAO loanDao = new com.capgemini.pecunia.hibernate.dao.LoanDAOImpl();
+		//com.capgemini.pecunia.hibernate.dao.LoanDAO loanDao = new com.capgemini.pecunia.hibernate.dao.LoanDAOImpl();
 		int loanId = 0;
 		try {
 			Account account = new Account();
 			account.setId(loan.getAccountId());
-			AccountManagementService accountManagementService = new AccountManagementServiceImpl();
+			//AccountManagementService accountManagementService = new AccountManagementServiceImpl();
 			isValidAccount = accountManagementService.validateAccountId(account);
 			if (isValidAccount) {
 				loan.setEmi(LoanServiceImpl.calculateEMI(loan.getAmount(), loan.getTenure(), loan.getRoi()));

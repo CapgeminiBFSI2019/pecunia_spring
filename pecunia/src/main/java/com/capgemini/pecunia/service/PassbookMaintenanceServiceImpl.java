@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dto.Account;
@@ -19,6 +20,12 @@ import com.capgemini.pecunia.util.LoggerMessage;
 
 @Service
 public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceService {
+	
+	@Autowired
+	PassbookMaintenanceDAO pdao;
+	@Autowired
+	AccountManagementService accountManagementService;
+	
 	
 	Logger logger = Logger.getRootLogger();
 
@@ -40,13 +47,14 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 	{
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
-			PassbookMaintenanceDAO pdao = new PassbookMaintenanceDAOImpl();
+			//PassbookMaintenanceDAO pdao = new PassbookMaintenanceDAOImpl();
 			Account account = new Account();
 			account.setId(accountId);
-			AccountManagementService accountManagementService = new AccountManagementServiceImpl();
+			//AccountManagementService accountManagementService = new AccountManagementServiceImpl();
 			boolean accountExist = accountManagementService.validateAccountId(account);
 			if (!accountExist) {
-				throw new PassbookException(ErrorConstants.ERROR_VALIDATION);
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 
 			transactionList = pdao.updatePassbook(accountId);
@@ -59,7 +67,9 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			}
 			return transactionList;
 		} catch (Exception e) {
+			logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
 			throw new PassbookException(e.getMessage());
+			
 		}
 	}
 
@@ -78,21 +88,24 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 		
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
-			PassbookMaintenanceDAO pdao = new PassbookMaintenanceDAOImpl();
+			//PassbookMaintenanceDAO pdao = new PassbookMaintenanceDAOImpl();
 			Account account = new Account();
 			account.setId(accountId);
-			AccountManagementService accountManagementService = new AccountManagementServiceImpl();
+			//AccountManagementService accountManagementService = new AccountManagementServiceImpl();
 			boolean accountExist = accountManagementService.validateAccountId(account);
 			if(!accountExist)
 			{
-				throw new PassbookException(ErrorConstants.ERROR_VALIDATION);
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		
 			
 			transactionList = pdao.accountSummary(accountId, startDate, endDate);
 			
+			logger.info(LoggerMessage.ACCOUNT_SUMMARY_SUCCESSFUL);
 			return transactionList;
 		} catch (Exception e) {
+			logger.error(LoggerMessage.ACCOUNT_SUMMARY_ERROR);
 			throw new PassbookException(e.getMessage());
 
 }

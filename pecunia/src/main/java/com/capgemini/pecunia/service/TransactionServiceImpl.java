@@ -28,6 +28,11 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	AccountManagementService accManagement;
 	
+	@Autowired
+	com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO;
+	
+
+	
 	public TransactionServiceImpl() {
 	}
 
@@ -36,14 +41,14 @@ public class TransactionServiceImpl implements TransactionService {
 	/*******************************************************************************************************
 	 * - Function Name : getBalance(Account account) - Input Parameters : account
 	 * object - Return Type : double - Throws :
-	 * TransactionException,PecuniaException - Author : Rohan Patil,Anwesha Das -
+	 * TransactionException,PecuniaException - Author : Abhisek Kumar -
 	 * Creation Date : 23/09/2019 - Description : Getting balance of the specified
 	 * account
 	 ********************************************************************************************************/
 
 	public double getBalance(Account account) throws TransactionException, PecuniaException {
 		try {
-			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
+			//com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			double balance;
 			balance = transactionDAO.getBalance(account);
 			return balance;
@@ -68,7 +73,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	public boolean updateBalance(Account account) throws TransactionException, PecuniaException {
 		try {
-			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
+			//com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			boolean success = false;
 			success = transactionDAO.updateBalance(account);
 			return success;
@@ -91,7 +96,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 		int transId = 0;
 		try {
-			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
+			//com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			String accId = transaction.getAccountId();
 
 			double amount = transaction.getAmount();
@@ -164,7 +169,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 		int transId = 0;
 		try {
-			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
+			//com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			String accId = transaction.getAccountId();
 			double amount = transaction.getAmount();
 			LocalDateTime transDate = LocalDateTime.now();
@@ -229,7 +234,7 @@ public class TransactionServiceImpl implements TransactionService {
 		int chequeId = 0;
 		try {
 
-			com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
+			//com.capgemini.pecunia.hibernate.dao.TransactionDAO transactionDAO = new com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl();
 			String accId = transaction.getAccountId();
 			double amount = transaction.getAmount();
 			LocalDateTime transDate = LocalDateTime.now();
