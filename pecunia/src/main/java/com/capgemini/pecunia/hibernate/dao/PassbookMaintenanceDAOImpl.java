@@ -29,10 +29,19 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 	private String transTo;
 	private double closingBalance;
 
-	@Override
+	/*******************************************************************************************************
+	 * - Function Name : updatePassbook(String accountId) 
+	 * - Input Parameters : String accountId
+	 * - Return Type : List 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Mansi Agarwal
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update transaction details in passbook
+	 ********************************************************************************************************/
+	
 	public List<com.capgemini.pecunia.dto.Transaction> updatePassbook(String accountId) throws PassbookException, PecuniaException {
 		ArrayList<com.capgemini.pecunia.dto.Transaction> transList = new ArrayList<>();
-		System.out.println("dao");
+		
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			String hql = "from TransactionEntity where accountId= :accountId AND date BETWEEN (SELECT lastUpdated from AccountEntity where accountId= :accountId) and :currentDate";
@@ -40,27 +49,29 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 			query.setParameter("accountId", accountId);
 			query.setParameter("currentDate",java.sql.Timestamp.valueOf(LocalDateTime.now().plusMinutes(330)));
 			List<TransactionEntity> results = (List<TransactionEntity>)query.list();
-			System.out.println(results);
-            System.out.println("****************");
             transList = passbookDetails(results);            
-            System.out.println(transList);
+     
 		}
 		catch(Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
             throw new PassbookException(ErrorConstants.UPDATE_PASSBOOK_ERROR);
         }
 	 return transList;
 	}
 		
-
-	@Override
+	/*******************************************************************************************************
+	 * - Function Name : updateLastUpdated(String accountId) 
+	 * - Input Parameters : String accountId
+	 * - Return Type : boolean 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Mansi Agarwal
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update the date of last transaction printed in passbook
+	 ********************************************************************************************************/
+	
 	public boolean updateLastUpdated(String accountId) throws PecuniaException, PassbookException {
 		
 		boolean isUpdated = false;
-		System.out.println("before try");
 		try {
-			System.out.println("try update");
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			Transaction txn = session.beginTransaction();
 			String hql = "UPDATE AccountEntity SET lastUpdated = :lastUpdated WHERE accountId= :accountId";
@@ -73,21 +84,28 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 				isUpdated = true;
 				txn.commit();
 			} else {
-				System.out.println("error");
 				throw new PecuniaException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 			}
 		} catch (Exception e) {
-			System.out.println("catch error");
-			e.printStackTrace();
 			throw new PassbookException(e.getMessage());
 		}
 		return isUpdated;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : accountSummary(String accountId, Date startDate, Date endDate) 
+	 * - Input Parameters : String accountId, Date startDate, Date endDate
+	 * - Return Type : List 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Rishav Dev
+	 * - Creation Date : 02/11/2019 
+	 * - Description : Provides the account summary
+	 ********************************************************************************************************/
+	
 	public List<com.capgemini.pecunia.dto.Transaction> accountSummary(String accountId, LocalDate startDate, LocalDate endDate)
 			throws PassbookException, PecuniaException {
 		ArrayList<com.capgemini.pecunia.dto.Transaction> transList = new ArrayList<>();
-		System.out.println("dao");
+		
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			String hql = "from TransactionEntity where accountId= :accountId AND date BETWEEN :startDate and :endDate";
@@ -96,19 +114,25 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 			query.setParameter("startDate", java.sql.Date.valueOf(startDate));
 			query.setParameter("endDate", java.sql.Date.valueOf(endDate));
 			List<TransactionEntity> results = (List<TransactionEntity>)query.list();
-			System.out.println(results);
-            System.out.println("****************");
+			
             transList = passbookDetails(results);            
-            System.out.println(transList);
+            
 		}
 		catch(Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
             throw new PassbookException(ErrorConstants.TECH_ERROR);
         }
 	 return transList;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : passbookDetails(List<TransactionEntity> res) 
+	 * - Input Parameters : List<TransactionEntity> res
+	 * - Return Type : List 
+	 * - Author : Mansi Agarwal
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update transaction details in list
+	 ********************************************************************************************************/
+	
 	private ArrayList<com.capgemini.pecunia.dto.Transaction> passbookDetails(List<TransactionEntity> res){
 		ArrayList<com.capgemini.pecunia.dto.Transaction> transList = new ArrayList<>();
 		for(TransactionEntity object : res){

@@ -32,6 +32,16 @@ public class PassbookController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/accountSummary")
+	
+	/*******************************************************************************************************
+	 * - Function Name : accountSummary(@RequestBody Map<String, Object> requestData) 
+	 * - Input Parameters : @RequestBody Map<String, Object> requestData
+	 * - Return Type : String
+	 * - Author : Rishav Dev
+	 * - Creation Date : 02/11/2019 
+	 * - Description : Provides the account summary
+	 ********************************************************************************************************/
+	
 	public String accountSummary(@RequestBody Map<String, Object> requestData) {
 		
 
@@ -52,8 +62,7 @@ public class PassbookController {
 			if (accountSumm.size() > 0) {
 				for (Transaction transaction : accountSumm) {
 					jsonArray.add(gson.toJson(transaction, Transaction.class));
-				}
-			System.out.println("json array" + jsonArray);	
+				}	
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("message", "Account Summary \t");
 			dataResponse.add("data", jsonArray);
@@ -72,6 +81,16 @@ public class PassbookController {
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/updatePassbook")
+	
+	/*******************************************************************************************************
+	 * - Function Name : updatePassbook(@RequestBody Map<String, Object> requestData) 
+	 * - Input Parameters : @RequestBody Map<String, Object> requestData
+	 * - Return Type : String 
+	 * - Author : Mansi Agarwal
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update transaction details in passbook
+	 ********************************************************************************************************/
+	
 	public String updatePassbook(@RequestBody Map<String, Object> requestData) {
 		
 		String accountID = requestData.get("accountID").toString();
@@ -89,7 +108,6 @@ public class PassbookController {
 				for (Transaction transaction : passbookUpdate) {
 					jsonArray.add(gson.toJson(transaction, Transaction.class));
 				}
-			System.out.println("json array" + jsonArray);	
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("message", "Passbook \t");
 			dataResponse.add("data", jsonArray);

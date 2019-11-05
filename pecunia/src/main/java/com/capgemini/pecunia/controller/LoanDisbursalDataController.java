@@ -21,6 +21,8 @@ import com.google.gson.JsonObject;
 public class LoanDisbursalDataController {
 	@Autowired
 	LoanDisbursal loanDisbursal;
+	@Autowired
+	LoanDisbursalService loanDisbursalService;
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(path = "/loandisbursaldata")
@@ -29,7 +31,7 @@ public class LoanDisbursalDataController {
 		JsonArray jsonArray = new JsonArray();
 		Gson gson = new Gson();
 		ArrayList<LoanDisbursal> retrieveLoanDisbursedData = new ArrayList<LoanDisbursal>();
-		LoanDisbursalService loanDisbursalService = new LoanDisbursalServiceImpl();
+		
 		try {
 			retrieveLoanDisbursedData = loanDisbursalService.approvedLoanList();
 			if (retrieveLoanDisbursedData.size() > 0) {

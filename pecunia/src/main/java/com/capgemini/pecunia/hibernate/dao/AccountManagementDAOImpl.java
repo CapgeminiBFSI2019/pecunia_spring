@@ -1,6 +1,7 @@
 package com.capgemini.pecunia.hibernate.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -32,23 +33,21 @@ import com.capgemini.pecunia.util.HibernateUtil;
 public class AccountManagementDAOImpl implements AccountManagementDAO {
 	Logger logger = Logger.getRootLogger();
 
-	@Override
+	
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException {
 		boolean isDeleted = false;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			Transaction txn = session.beginTransaction();
-			String hql = "UPDATE AccountEntity SET status='Closed' WHERE accountId=:accountId";
-			Query query = session.createQuery(hql);
-			query.setParameter("accountId", account.getId());
-			query.setMaxResults(1);
-			int rowsAffected = query.executeUpdate();
-			if (rowsAffected > 0) {
-				isDeleted = true;
-				txn.commit();
-			} else {
-				throw new PecuniaException(ErrorConstants.DELETE_ACCOUNT_ERROR);
-			}
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaUpdate<AccountEntity> criteriaUpdate = cb.createCriteriaUpdate(AccountEntity.class);
+			Root<AccountEntity> rootNew = criteriaUpdate.from(AccountEntity.class);
+			criteriaUpdate.set("status", Constants.ACCOUNT_STATUS[1]);
+			criteriaUpdate.where(cb.equal(rootNew.get(Constants.ACCOUNT_ID), account.getId()));
+
+			Transaction transaction = session.beginTransaction();
+			session.createQuery(criteriaUpdate).executeUpdate();
+			transaction.commit();
+			isDeleted = true;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.DELETE_ACCOUNT_ERROR);
@@ -57,26 +56,27 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isDeleted;
 	}
 
-	@Override
+	
 	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
 
 		Account acc = new Account();
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			String hql = "from AccountEntity where accountId= :accountId";
-			Query query = session.createQuery(hql);
-			query.setParameter("accountId", account.getId());
-			query.setMaxResults(1);
-			AccountEntity accountEntity = (AccountEntity) query.uniqueResult();
-			if (accountEntity != null) {
-				acc.setId(accountEntity.getAccountId());
-				acc.setBalance(accountEntity.getBalance());
-				acc.setAccountType(accountEntity.getType());
-				acc.setStatus(accountEntity.getStatus());
-				acc.setInterest(accountEntity.getInterest());
-				acc.setBranchId(accountEntity.getBranchId());
-				acc.setHolderId(accountEntity.getCustomerId());
-				acc.setLastUpdated(accountEntity.getLastUpdated());
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<AccountEntity> cr = cb.createQuery(AccountEntity.class);
+			Root<AccountEntity> root = cr.from(AccountEntity.class);
+			cr.select(root).where(cb.equal(root.get(Constants.ACCOUNT_ID), account.getId()));
+			Query<AccountEntity> q = session.createQuery(cr);
+			AccountEntity accObj = q.getSingleResult();
+			if (accObj != null) {
+				acc.setId(accObj.getAccountId());
+				acc.setBalance(accObj.getBalance());
+				acc.setAccountType(accObj.getType());
+				acc.setStatus(accObj.getStatus());
+				acc.setInterest(accObj.getInterest());
+				acc.setBranchId(accObj.getBranchId());
+				acc.setHolderId(accObj.getCustomerId());
+				acc.setLastUpdated(accObj.getLastUpdated());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -86,7 +86,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return acc;
 	}
 
-	@Override
+	
 	public boolean updateCustomerName(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
 		String custId = null;
@@ -116,7 +116,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isUpdated;
 	}
 
-	@Override
+	
 	public boolean updateCustomerContact(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
 		String custId = null;
@@ -146,7 +146,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isUpdated;
 	}
 
-	@Override
+	
 	public boolean updateCustomerAddress(Account account, Address address) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
 		String custId = null;
@@ -190,7 +190,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isUpdated;
 	}
 
-	@Override
+	
 	public String addCustomerDetails(Customer customer, Address address)
 			throws PecuniaException, AccountException, SQLException {
 		String addrId = null;
@@ -208,20 +208,30 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		session.save(addr);
 		session.getTransaction().commit();
 		try {
-		
-			String hql = "SELECT MAX(id) FROM AddressEntity";
-			Query query = session.createQuery(hql);
-
-			query.setMaxResults(1);
-
-			if (query.uniqueResult() != null) {
-				addrId = (String) query.uniqueResult();
-
-			} else {
-				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Object> crt1 = cb.createQuery(Object.class);
+			Root<AddressEntity> root1 = crt1.from(AddressEntity.class);
+			crt1.select(cb.max(root1.get("id"))); 
+			Query query1 = session.createQuery(crt1);
+			//addrId = (String) query1.getSingleResult();
+			List results = query1.getResultList();
+			for(Object addrObj : results) {
+				addrId = (String) addrObj;
 			}
-
+			System.out.println(addrId);
+//			CriteriaBuilder cb = session.getCriteriaBuilder();
+//			CriteriaQuery<String> cr = cb.createQuery(String.class);
+//			Root<AddressEntity> root = cr.from(AddressEntity.class);
+//			cr.multiselect(cb.max(root.get("id")));
+//			Query<String> query = session.createQuery(cr);
+//			List addrList = query.getResultList();
+//			if(addrList!=null) {
+//				for(AddressEntity addrObj : addrList) {
+//					custId = (String) addrObj.getId();
+//				}
+//			}
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
 		}
@@ -238,20 +248,44 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		session.save(cust);
 		session.getTransaction().commit();
 		try {
-
-			String hql1 = "SELECT MAX(customerId) FROM CustomerEntity";
-			Query query = session.createQuery(hql1);
-
-			query.setMaxResults(1);
-			
-			if (query.uniqueResult() != null) {
-				custId = (String) query.uniqueResult();
-
-			} else {
-				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Object> crt1 = cb.createQuery(Object.class);
+			Root<CustomerEntity> root1 = crt1.from(CustomerEntity.class);
+			crt1.select(cb.max(root1.get("customerId"))); 
+			Query query1 = session.createQuery(crt1);
+			List results = query1.getResultList();
+			for(Object custObj : results) {
+				custId = (String) custObj;
 			}
+			//custId = (String) query1.getSingleResult();
+			System.out.println(custId);
+//			@SuppressWarnings("deprecation")
+//			Criteria criteria = session.createCriteria(CustomerEntity.class).setProjection(Projections.max("customerId"));
+//			criteria.setMaxResults(1);
+//			@SuppressWarnings("unchecked")
+//			List<CustomerEntity> list = criteria.list();
+//			if(list!=null) {
+//				for(CustomerEntity custObj : list) {
+//					custId = (String) custObj.getCustomerId();
+//				}
+//			}
+//			else {
+//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
+//			}
+//			String hql1 = "SELECT MAX(customerId) FROM CustomerEntity";
+//			Query query = session.createQuery(hql1);
+//
+//			query.setMaxResults(1);
+//			// cust = (CustomerEntity) query.uniqueResult();
+//			if (query.uniqueResult() != null) {
+//				custId = (String) query.uniqueResult();
+//
+//			} else {
+//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
+//			}
 
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
@@ -261,15 +295,12 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 
 	}
 
-	@Override
+	
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
 		
 		Session session = HibernateUtil.getSessionFactory().openSession();
-
 		Transaction txn = session.beginTransaction();
-
 		AccountEntity acc = new AccountEntity();
-
 		acc.setBranchId(account.getBranchId());
 		acc.setType(account.getAccountType());
 		acc.setStatus(account.getStatus());
@@ -285,7 +316,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return account.getId();
 	}
 
-	@Override
+	
 	public String calculateAccountId(Account account) throws PecuniaException, AccountException {
 		long oldId = 0;
 		String oldIdstr = null;
@@ -312,23 +343,28 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return id;
 	}
 
-	@Override
+	
 	public boolean validateAccountId(Account account) throws PecuniaException, AccountException {
 		boolean isValidated = false;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			String hql = "SELECT accountId FROM AccountEntity WHERE accountId=:accountId";
-			Query query = session.createQuery(hql);
-			query.setParameter("accountId", account.getId());
-			query.setMaxResults(1);
-			if (query.uniqueResult() != null) {
+			System.out.println(session.getSessionFactory());
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<AccountEntity> cr = cb.createQuery(AccountEntity.class);
+			Root<AccountEntity> root = cr.from(AccountEntity.class);
+			cr.select(root).where(cb.equal(root.get(Constants.ACCOUNT_ID), account.getId()));
+			Query<AccountEntity> q = session.createQuery(cr);
+			List results = q.getResultList();
+			if(!results.isEmpty()){
 				isValidated = true;
-			} else {
+			}else {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 			logger.error(e.getMessage());
-			throw new AccountException(ErrorConstants.ERROR_VALIDATION);
+			throw new AccountException(e.getMessage());
 		}
 		logger.info(Constants.ACCOUNT_ID_VALIDATED);
 		return isValidated;

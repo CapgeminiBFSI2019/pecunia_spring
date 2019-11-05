@@ -28,7 +28,7 @@ import com.capgemini.pecunia.util.HibernateUtil;
 //fetching the data for Loan disbursal operations from LoanDisbursal DAO layer
 
 @Repository
-public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
+public class LoanDisbursalDAOImpl implements LoanDisbursalDAO {
 	Logger logger = Logger.getRootLogger();
 
 	private int loanId;

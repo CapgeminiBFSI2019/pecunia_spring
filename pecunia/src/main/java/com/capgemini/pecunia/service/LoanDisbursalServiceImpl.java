@@ -13,7 +13,7 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanDisbursalException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
-import com.capgemini.pecunia.hibernate.dao.LoanDisbursalDAOImplHibernate;
+import com.capgemini.pecunia.hibernate.dao.LoanDisbursalDAOImpl;
 import com.capgemini.pecunia.hibernate.dao.TransactionDAOImpl;
 import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.LoggerMessage;
@@ -37,7 +37,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 
 	public ArrayList<Loan> retrieveAll() throws PecuniaException, IOException, LoanDisbursalException {
 
-		LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+		LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 		ArrayList<Loan> retrievedLoanRequests = new ArrayList<Loan>();
 		retrievedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveLoanList();
 		if (retrievedLoanRequests.size() == 0) {
@@ -58,7 +58,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 	 ********************************************************************************************************/
 
 	public ArrayList<Loan> approveLoan() throws IOException, PecuniaException, LoanDisbursalException {
-		LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+		LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 		ArrayList<Loan> acceptedLoanRequests = new ArrayList<Loan>();
 		acceptedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveAcceptedLoanList();
 		if (acceptedLoanRequests.size() == 0) {
@@ -85,7 +85,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 	 ********************************************************************************************************/
 
 	public ArrayList<Loan> approveLoanWithoutStatus() throws IOException, PecuniaException, LoanDisbursalException {
-		LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+		LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 		ArrayList<Loan> acceptedLoanRequests = new ArrayList<Loan>();
 		acceptedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveAcceptedLoanListWithoutStatus();
 		if (acceptedLoanRequests.size() == 0) {
@@ -109,7 +109,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 	 ********************************************************************************************************/
 
 	public ArrayList<LoanDisbursal> approvedLoanList() throws IOException, PecuniaException, LoanDisbursalException {
-		LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+		LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 
 		approvedLoanList = loanDisbursedDAO.loanApprovedList();
 		if (approvedLoanList.size() == 0) {
@@ -132,7 +132,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 
 	public ArrayList<Loan> rejectedLoanRequests() throws PecuniaException, LoanDisbursalException, IOException {
 
-		LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+		LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 		ArrayList<Loan> rejectedLoanRequests = new ArrayList<Loan>();
 		rejectedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveRejectedLoanList();
 		if (rejectedLoanRequests.size() == 0) {
@@ -162,29 +162,26 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 			throws PecuniaException, LoanDisbursalException {
 		String status = Constants.STATUS_CHECK[0];
 		if (updateLoanApprovals != null) {
-			LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+			LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 			for (int index = 0; index < updateLoanApprovals.size(); index++) {
 				double updatedDueAmount = updateLoanApprovals.get(index).getDisbursedAmount()
 						- (updateLoanApprovals.get(index).getDisbursedAmount()
 								/ updateLoanApprovals.get(index).getNumberOfEmiToBePaid()) * numberOfMonths;
 
-				System.out.println(updatedDueAmount + " from hibernate");
+		
 
 				double updatedTenure = updateLoanApprovals.get(index).getNumberOfEmiToBePaid() - numberOfMonths;
 
-				System.out.println(updatedTenure + " from hibernate");
 
 				String accountId = updateLoanApprovals.get(index).getAccountId();
 				int loanDisbursalId = updateLoanApprovals.get(index).getLoanDisbursalId();
-				System.out.println(accountId);
 
-				System.out.println(updateLoanApprovals);
 
 				try {
-					System.out.println("called");
+				
 					loanDisbursedDAO.updateLoanAccount(updateLoanApprovals, updatedDueAmount, updatedTenure, accountId,
 							loanDisbursalId);
-					System.out.println("updated");
+			
 				} catch (Exception e) {
 					logger.error(e.getMessage());
 					throw new LoanDisbursalException(e.getMessage());
@@ -214,7 +211,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 	public String updateLoanStatus(ArrayList<Loan> rejectedLoanList, ArrayList<Loan> approvedLoanList)
 			throws PecuniaException, LoanDisbursalException {
 		String status = Constants.STATUS_CHECK[0];
-		LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+		LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 		if (rejectedLoanList != null || approvedLoanList != null) {
 			try {
 				for (int index = 0; index < rejectedLoanList.size(); index++) {
@@ -256,7 +253,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService {
 	public ArrayList<String> updateExistingBalance(ArrayList<Loan> approvedLoanRequests,
 			ArrayList<LoanDisbursal> approvedLoanList)
 			throws PecuniaException, TransactionException, LoanDisbursalException, IOException {
-		LoanDisbursalDAOImplHibernate loanDisbursedDAO = new LoanDisbursalDAOImplHibernate();
+		LoanDisbursalDAOImpl loanDisbursedDAO = new LoanDisbursalDAOImpl();
 		ArrayList<String> status = new ArrayList<String>();
 		ArrayList<String> accId = new ArrayList<String>();
 		accId = loanDisbursedDAO.uniqueIds();

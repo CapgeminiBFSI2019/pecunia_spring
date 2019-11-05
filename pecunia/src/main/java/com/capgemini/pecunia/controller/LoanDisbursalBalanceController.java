@@ -24,15 +24,20 @@ import com.google.gson.JsonObject;
 public class LoanDisbursalBalanceController {
 	@Autowired
 	LoanDisbursal loanDisbursal;
+	@Autowired
 	Account account;
+	@Autowired
 	Loan loan;
+	@Autowired
+	LoanDisbursalService loanDisbursalService;
 	
 	@CrossOrigin(origins = "http://localhost:4200")
+	
 	@GetMapping(path = "/loandisbursalbalanceupdation")
 	
 	public String updateBalance() throws IOException{
 	
-		LoanDisbursalService loanDisbursalService = new LoanDisbursalServiceImpl();
+
 		ArrayList<Loan> retrieveAccepted = new ArrayList<Loan>();
 		try {
 		retrieveAccepted = loanDisbursalService.approveLoanWithoutStatus();
