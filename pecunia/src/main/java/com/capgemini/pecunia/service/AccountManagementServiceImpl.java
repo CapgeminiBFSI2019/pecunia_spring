@@ -246,13 +246,28 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
 	}
+	
+	/*******************************************************************************************************
+	 * - Function Name : showAccountDetails(Account account) - Input Parameters : Account
+	 * account - Return Type : boolean - Throws : AccountException - Author : Rohit
+	 * Kumar - Creation Date : 24/09/2019 - Description : Showing Details of Account
+	 * 
+	 * @throws PecuniaException
+	 ********************************************************************************************************/
 
 	@Override
 	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
 		Account accountRequested = new Account();
 		try {
+			boolean isValidated = validateAccountId(account);
+			if (isValidated) {
+				accountRequested = accountDAO.showAccountDetails(account);
+			} else {
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+			}
 
-			accountRequested = accountDAO.showAccountDetails(account);
+			
 		} catch (AccountException | PecuniaException e) {
 			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);

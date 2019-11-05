@@ -25,7 +25,7 @@ public class LoanDAOImpl implements LoanDAO {
 		org.hibernate.Transaction txn = null;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			//begin here
+			
 			 txn = session.beginTransaction();
 			LoanRequestEntity loanRequestEntity = new LoanRequestEntity();
 			loanRequestEntity.setAccountId(loan.getAccountId());

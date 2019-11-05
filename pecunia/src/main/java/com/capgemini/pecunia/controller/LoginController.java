@@ -24,6 +24,9 @@ public class LoginController {
 
 		@CrossOrigin(origins = "http://localhost:4200")  // Setting cross origin access to allow access from the specified server
 		@PostMapping(path = "/login")
+		
+		
+	
 		public String validateEmail(@RequestBody Map<String, Object> requestData) {
 			JsonObject dataResponse = new JsonObject();  // Creating json object
 
@@ -33,22 +36,11 @@ public class LoginController {
 			System.out.println(username + "\n" + password);
 			login.setPassword(password);
 			login.setUsername(username);
-//			creditTransaction.setAccountId(beneficiaryAccountNumber);
-//			creditTransaction.setTransTo(beneficiaryAccountNumber);
-//			creditTransaction.setTransFrom(payeeAccountNumber);
-//
-//			creditCheque.setAccountNo(payeeAccountNumber);
-//			creditCheque.setHolderName(payeeName);
-//			creditCheque.setIfsc(ifsc);
-//			creditCheque.setIssueDate(chequeIssueDate);
-//			creditCheque.setNum(Integer.parseInt(chequeNumber));
-//			creditCheque.setBankName(bankName);
 
 			try {
 				boolean isValidated = loginService.validateEmail(login);
 				dataResponse.addProperty("success", true);
 				dataResponse.addProperty("Login Id", isValidated);
-//				dataResponse.addProperty("message", "Amount credited.Trans Id is \t" + transId);
 
 			} catch (PecuniaException | LoginException e) {
 				dataResponse.addProperty("success", false);
