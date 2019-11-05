@@ -3,6 +3,8 @@ package com.capgemini.pecunia.dto;
 import org.springframework.stereotype.Component;
 
 @Component
+//Specifying datatypes for LoanDisbursal class in DTO
+//Specifying getter and setter method for LoanDisbursal class in DTO
 public class LoanDisbursal {
 
 	private int loanDisbursalId;

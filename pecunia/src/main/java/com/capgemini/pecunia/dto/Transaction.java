@@ -3,6 +3,8 @@ package com.capgemini.pecunia.dto;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 @Component
+//Specifying datatypes for Transaction class in DTO
+//Specifying getter and setter method for Transaction class in DTO
 public class Transaction {
 	private int id;
 	private String accountId;

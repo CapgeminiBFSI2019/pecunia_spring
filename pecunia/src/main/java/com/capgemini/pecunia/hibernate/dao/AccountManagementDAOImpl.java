@@ -25,6 +25,8 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
+//implementing hibernate for AccountManagement DAO layer
+//fetching the data for account management operations from AccountManagement DAO layer
 
 @Repository
 public class AccountManagementDAOImpl implements AccountManagementDAO {
@@ -206,20 +208,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		session.save(addr);
 		session.getTransaction().commit();
 		try {
-//			@SuppressWarnings("deprecation")
-//			Criteria criteria = session.createCriteria(AddressEntity.class).setProjection(Projections.max("id"));
-//			criteria.setMaxResults(1);
-//			@SuppressWarnings("unchecked")
-//			List<AddressEntity> list = criteria.list();
-//			if(list!=null) {
-//				for(AddressEntity addressObj : list) {
-//					addrId= (String) addressObj.getId();
-//				}
-//			}
-//			else {
-//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
-//			}
-//			
+		
 			String hql = "SELECT MAX(id) FROM AddressEntity";
 			Query query = session.createQuery(hql);
 
@@ -249,24 +238,12 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		session.save(cust);
 		session.getTransaction().commit();
 		try {
-//			@SuppressWarnings("deprecation")
-//			Criteria criteria = session.createCriteria(CustomerEntity.class).setProjection(Projections.max("customerId"));
-//			criteria.setMaxResults(1);
-//			@SuppressWarnings("unchecked")
-//			List<CustomerEntity> list = criteria.list();
-//			if(list!=null) {
-//				for(CustomerEntity custObj : list) {
-//					custId = (String) custObj.getCustomerId();
-//				}
-//			}
-//			else {
-//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
-//			}
+
 			String hql1 = "SELECT MAX(customerId) FROM CustomerEntity";
 			Query query = session.createQuery(hql1);
 
 			query.setMaxResults(1);
-			// cust = (CustomerEntity) query.uniqueResult();
+			
 			if (query.uniqueResult() != null) {
 				custId = (String) query.uniqueResult();
 
@@ -286,10 +263,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 
 	@Override
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
-		// String accId = null;
+		
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
-		// session.beginTransaction();
 		Transaction txn = session.beginTransaction();
 
 		AccountEntity acc = new AccountEntity();

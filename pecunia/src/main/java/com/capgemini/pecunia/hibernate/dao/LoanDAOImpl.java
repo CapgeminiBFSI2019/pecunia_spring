@@ -12,13 +12,15 @@ import com.capgemini.pecunia.exception.LoanException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
 @Repository
+//implementing hibernate for Loan DAO layer
+//fetching the data for Loan operations from Loan DAO layer
+
 public class LoanDAOImpl implements LoanDAO {
 	Logger logger = Logger.getRootLogger();
 
 	@Override
 	public int addLoanDetails(Loan loan) throws PecuniaException, LoanException {
-		// TODO Auto-generated method stub
-		// return false;
+		
 		int loanId = 0;
 		org.hibernate.Transaction txn = null;
 		try {

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.capgemini.pecunia.exception.PassbookException;
 
 
+//JUNIT test cases for PassbookMaintenance Service class
 
 class PassbookMaintenanceServiceImplTest {
 PassbookMaintenanceServiceImpl pbm;

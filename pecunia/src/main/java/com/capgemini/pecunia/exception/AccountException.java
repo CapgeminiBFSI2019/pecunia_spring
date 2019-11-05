@@ -1,10 +1,6 @@
 package com.capgemini.pecunia.exception;
+//exceptions for AccountException class
 
-/**
- * 
- * @author vrazdan
- *
- */
 public class AccountException extends Exception {
 	public AccountException(String message) {
 

@@ -1,9 +1,12 @@
 package com.capgemini.pecunia.dto;
 
 import java.time.LocalDateTime;
-
+//specifying datatypes for fields in Account DTO 
+//specifying getter setter for Account DTO
 import org.springframework.stereotype.Component;
 @Component
+//Specifying datatypes for Account class in DTO
+//Specifying getter and setter method for Account class in DTO
 public class Account {
 
 	private String id;

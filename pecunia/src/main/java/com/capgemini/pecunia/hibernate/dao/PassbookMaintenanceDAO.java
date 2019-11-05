@@ -6,7 +6,6 @@ import java.util.List;
 import com.capgemini.pecunia.dto.Transaction;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.PassbookException;
-
 public interface PassbookMaintenanceDAO {
 	public List<Transaction> updatePassbook(String accountId) throws PassbookException, PecuniaException;
 

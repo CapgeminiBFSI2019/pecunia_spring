@@ -1,5 +1,5 @@
 package com.capgemini.pecunia.util;
-
+//Logger messages
 public class LoggerMessage {
 
 	public static final String LOGIN_CONNECTION_ERROR = "Connection error";

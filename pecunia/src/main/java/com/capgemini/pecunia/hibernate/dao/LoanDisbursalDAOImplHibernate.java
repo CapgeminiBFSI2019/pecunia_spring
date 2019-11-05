@@ -24,6 +24,8 @@ import com.capgemini.pecunia.exception.LoanDisbursalException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
+//implementing hibernate for LoanDisbursal DAO layer
+//fetching the data for Loan disbursal operations from LoanDisbursal DAO layer
 
 @Repository
 public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
