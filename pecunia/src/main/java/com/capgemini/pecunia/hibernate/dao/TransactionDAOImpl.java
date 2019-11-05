@@ -2,7 +2,6 @@ package com.capgemini.pecunia.hibernate.dao;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.capgemini.pecunia.dto.Account;
@@ -18,32 +17,24 @@ import com.capgemini.pecunia.util.HibernateUtil;
 
 @Repository
 public class TransactionDAOImpl implements TransactionDAO {
-	
+
 	Logger logger = Logger.getRootLogger();
-	
+
 	@Override
 	public double getBalance(Account account) throws PecuniaException, TransactionException {
 
 		double accountBalance = -1;
-		org.hibernate.Transaction transaction = null;
 		try {
 			String accountId = account.getId();
 			Session session = HibernateUtil.getSessionFactory().openSession();
-//			transaction = session.beginTransaction();
-//			@SuppressWarnings("rawtypes")
-//			Query query = session.createNamedQuery("AccountEntity.getBalanceById");
-//			query.setParameter("accountId", accountId);
-			
-//			query.setMaxResults(1);
-//			AccountEntity accountEntity = (AccountEntity) query.uniqueResult();
-			AccountEntity accountEntity = (AccountEntity) session.load(AccountEntity.class,accountId);
+			AccountEntity accountEntity = (AccountEntity) session.load(AccountEntity.class, accountId);
 			if (accountEntity != null) {
 				accountBalance = accountEntity.getBalance();
 			} else {
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 				throw new PecuniaException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 
-//			transaction.commit();
 			session.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -68,6 +59,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			if (accountEntity.getBalance() == newBalance) {
 				balanceUpdated = true;
 			} else {
+				logger.error(ErrorConstants.BALANCE_UPDATE_ERROR);
 				throw new TransactionException(ErrorConstants.BALANCE_UPDATE_ERROR);
 			}
 			tx.commit();
@@ -101,7 +93,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			if (txn != null) {
 				txn.rollback();
 			}
-			logger.error(e.getMessage());
+			logger.error(ErrorConstants.CHEQUE_INSERTION_ERROR);
 			throw new PecuniaException(ErrorConstants.CHEQUE_INSERTION_ERROR);
 		}
 		return chequeId;
@@ -128,12 +120,10 @@ public class TransactionDAOImpl implements TransactionDAO {
 			transactionId = transactionEntity.getId();
 			txn.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
 			if (txn != null) {
 				txn.rollback();
 			}
-			logger.error(e.getMessage());
+			logger.error(ErrorConstants.TRANSACTION_INSERTION_ERROR);
 			throw new PecuniaException(ErrorConstants.TRANSACTION_INSERTION_ERROR);
 		}
 		return transactionId;
