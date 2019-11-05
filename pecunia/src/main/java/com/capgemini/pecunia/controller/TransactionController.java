@@ -38,7 +38,7 @@ public class TransactionController {
 	@PostMapping(path = "/creditCheque")
 
 	/*******************************************************************************************************
-	 * - Function Name : creditUsingCheque(@RequestBody Map<String, Object>
+	 * - Function Name : creditUsingCheque(@RequestBody Map<String, Object>)
 	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
 	 * requestData - Return Type : String - Author : Rohan patil - Creation Date :
 	 * 02/11/2019 - Description : Credit Using Cheque
