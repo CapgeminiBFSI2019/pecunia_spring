@@ -25,7 +25,11 @@ import com.google.gson.JsonObject;
 public class LoanDisbursalRequestsController {
 	@Autowired
 	Loan loan;
+	@Autowired
 	LoanDisbursal loanDisbursal;
+	@Autowired
+	LoanDisbursalService loanDisbursalService;
+	
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/loandisbursal/{menuOption}", method = RequestMethod.GET)
@@ -33,7 +37,7 @@ public class LoanDisbursalRequestsController {
 	@ResponseBody
 	public String loanRequests(
 	  @PathVariable String menuOption) throws IOException {
-		LoanDisbursalService loanDisbursalService = new LoanDisbursalServiceImpl();
+		
 		JsonArray jsonArray = new JsonArray();
 		Gson gson = new Gson();
 		JsonObject dataResponse = new JsonObject();

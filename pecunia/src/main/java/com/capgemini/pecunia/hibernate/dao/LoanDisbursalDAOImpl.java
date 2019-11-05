@@ -26,7 +26,7 @@ import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
 
 @Repository
-public class LoanDisbursalDAOImplHibernate implements LoanDisbursalDAO {
+public class LoanDisbursalDAOImpl implements LoanDisbursalDAO {
 	Logger logger = Logger.getRootLogger();
 
 	private int loanId;
