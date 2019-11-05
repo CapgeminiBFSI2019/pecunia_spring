@@ -15,7 +15,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.service.TransactionService;
 import com.google.gson.JsonObject;
-
+//Autowiring Transaction service from DAO
 @RestController
 public class TransactionController {
 
@@ -35,11 +35,11 @@ public class TransactionController {
 	Transaction creditSlipTransaction;
 	
 	
-
+	// Setting cross origin access to allow access from the specified server
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/creditCheque")
 	public String creditUsingCheque(@RequestBody Map<String, Object> requestData) {
-		JsonObject dataResponse = new JsonObject();
+		JsonObject dataResponse = new JsonObject();  // Creating json object
 
 		String payeeAccountNumber = requestData.get("payeeAccountNumber").toString();
 		String beneficiaryAccountNumber = requestData.get("beneficiaryAccountNumber").toString();

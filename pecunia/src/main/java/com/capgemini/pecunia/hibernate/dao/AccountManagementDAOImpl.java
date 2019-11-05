@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-//import org.hibernate.query.Query;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -213,23 +212,13 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			Root<AddressEntity> root1 = crt1.from(AddressEntity.class);
 			crt1.select(cb.max(root1.get("id"))); 
 			Query query1 = session.createQuery(crt1);
-			//addrId = (String) query1.getSingleResult();
+			
 			List results = query1.getResultList();
 			for(Object addrObj : results) {
 				addrId = (String) addrObj;
 			}
 			System.out.println(addrId);
-//			CriteriaBuilder cb = session.getCriteriaBuilder();
-//			CriteriaQuery<String> cr = cb.createQuery(String.class);
-//			Root<AddressEntity> root = cr.from(AddressEntity.class);
-//			cr.multiselect(cb.max(root.get("id")));
-//			Query<String> query = session.createQuery(cr);
-//			List addrList = query.getResultList();
-//			if(addrList!=null) {
-//				for(AddressEntity addrObj : addrList) {
-//					custId = (String) addrObj.getId();
-//				}
-//			}
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -257,32 +246,8 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			for(Object custObj : results) {
 				custId = (String) custObj;
 			}
-			//custId = (String) query1.getSingleResult();
+			
 			System.out.println(custId);
-//			@SuppressWarnings("deprecation")
-//			Criteria criteria = session.createCriteria(CustomerEntity.class).setProjection(Projections.max("customerId"));
-//			criteria.setMaxResults(1);
-//			@SuppressWarnings("unchecked")
-//			List<CustomerEntity> list = criteria.list();
-//			if(list!=null) {
-//				for(CustomerEntity custObj : list) {
-//					custId = (String) custObj.getCustomerId();
-//				}
-//			}
-//			else {
-//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
-//			}
-//			String hql1 = "SELECT MAX(customerId) FROM CustomerEntity";
-//			Query query = session.createQuery(hql1);
-//
-//			query.setMaxResults(1);
-//			// cust = (CustomerEntity) query.uniqueResult();
-//			if (query.uniqueResult() != null) {
-//				custId = (String) query.uniqueResult();
-//
-//			} else {
-//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
-//			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
