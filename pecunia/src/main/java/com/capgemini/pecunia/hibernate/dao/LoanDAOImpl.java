@@ -17,13 +17,12 @@ public class LoanDAOImpl implements LoanDAO {
 
 	@Override
 	public int addLoanDetails(Loan loan) throws PecuniaException, LoanException {
-		// TODO Auto-generated method stub
-		// return false;
+		
 		int loanId = 0;
 		org.hibernate.Transaction txn = null;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			//begin here
+			
 			 txn = session.beginTransaction();
 			LoanRequestEntity loanRequestEntity = new LoanRequestEntity();
 			loanRequestEntity.setAccountId(loan.getAccountId());

@@ -1,5 +1,6 @@
 package com.capgemini.pecunia.hibernate.dao;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,7 @@ import com.capgemini.pecunia.util.HibernateUtil;
 
 @Repository
 public class LoginDAOImpl implements LoginDAO {
+	Logger logger = Logger.getRootLogger();
 
 	@Override
 	public String validateEmail(Login login) throws PecuniaException, LoginException {
@@ -29,7 +31,9 @@ public class LoginDAOImpl implements LoginDAO {
 			if (loginEntity != null) {
 				secretKey = loginEntity.getSecretKey();
 			} else {
+				logger.info(ErrorConstants.NO_SUCH_ACCOUNT);
 				throw new PecuniaException(ErrorConstants.NO_SUCH_ACCOUNT);
+				
 			}
 
 	
@@ -38,6 +42,7 @@ public class LoginDAOImpl implements LoginDAO {
 		session.close();
 	}
 	catch (Exception e) {
+		logger.error(e.getMessage());
 		throw new PecuniaException(e.getMessage());
 	}
 		return secretKey;
@@ -61,12 +66,14 @@ public class LoginDAOImpl implements LoginDAO {
 			if (loginEntity != null) {
 				password = loginEntity.getPassword();
 			} else {
+				logger.info(ErrorConstants.NO_SUCH_ACCOUNT);
 				throw new PecuniaException(ErrorConstants.LOGIN_ERROR);
 			}
 
 			transaction.commit();
 			session.close();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new PecuniaException(e.getMessage());
 		}
 		return password;
