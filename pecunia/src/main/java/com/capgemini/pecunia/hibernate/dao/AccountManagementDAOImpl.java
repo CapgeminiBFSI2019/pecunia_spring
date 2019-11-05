@@ -31,6 +31,16 @@ import com.capgemini.pecunia.util.HibernateUtil;
 public class AccountManagementDAOImpl implements AccountManagementDAO {
 	Logger logger = Logger.getRootLogger();
 
+	/*******************************************************************************************************
+	 * - Function Name : deleteAccount(Account account) 
+	 * - Input Parameters : Account account 
+	 * - Return Type : boolean 
+	 * - Throws : AccountException 
+	 * - Author : Rohit Kumar 
+	 * - Creation Date : 27/10/2019 
+	 * - Description : Deleting an account by setting account status "Closed"
+	 * @throws PecuniaException
+	 ********************************************************************************************************/
 	
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException {
 		boolean isDeleted = false;
@@ -54,7 +64,17 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isDeleted;
 	}
 
-	
+	/*******************************************************************************************************
+	 * - Function Name : showAccountDetails(Account account) 
+	 * - Input Parameters : Account account 
+	 * - Return Type : String 
+	 * - Throws : AccountException 
+	 * - Author : Rohit Kumar	 
+	 * - Creation Date : 29/10/2019 
+	 * - Description : Returns details of an account by account ID
+	 * @throws PecuniaException
+	 ********************************************************************************************************/
+
 	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
 
 		Account acc = new Account();
@@ -84,6 +104,16 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return acc;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : updateCustomerName(Account account, Customer customer) 
+	 * - Input Parameters : Account account, Customer customer 
+	 * - Return Type : boolean
+	 * - Throws : AccountException 
+	 * - Author : Aditi Singh 
+	 * - Creation Date : 27/10/2019 
+	 * - Description : Updating customer name
+	 * @throws PecuniaException
+	 ********************************************************************************************************/
 	
 	public boolean updateCustomerName(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
@@ -114,6 +144,16 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isUpdated;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : updateCustomerContact(Account account, Customer customer) 
+	 * - Input Parameters : Account account, Customer customer 
+	 * - Return Type : boolean
+	 * - Throws : AccountException 
+	 * - Author : Aditi Singh 
+	 * - Creation Date : 27/10/2019 
+	 * - Description : Updating customer contact
+	 * @throws PecuniaException
+	 ********************************************************************************************************/
 	
 	public boolean updateCustomerContact(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
@@ -144,6 +184,16 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isUpdated;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : updateCustomerAddress(Account account, Address address) 
+	 * -Input Parameters : Account account, Address address 
+	 * - Return Type : boolean 
+	 * - Throws : AccountException 
+	 * - Author : Aditi Singh 
+	 * - Creation Date : 27/10/2019
+	 * - Description : Updating customer address
+	 * @throws PecuniaException
+	 ********************************************************************************************************/
 	
 	public boolean updateCustomerAddress(Account account, Address address) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
@@ -188,6 +238,16 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return isUpdated;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : addCustomerDetails(Customer customer, Address address)
+	 * - Input Parameters : Customer customer, Address address
+	 * - Return Type : String 
+	 * - Throws : AccountException 
+	 * - Author : Vidushi Razdan 
+	 * - Creation Date : 27/10/2019 
+	 * - Description : Addition of address and customer details for creation of new account 
+	 * @throws PecuniaException
+	 ********************************************************************************************************/	
 	
 	public String addCustomerDetails(Customer customer, Address address)
 			throws PecuniaException, AccountException, SQLException {
@@ -209,25 +269,12 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			CriteriaBuilder cb = session.getCriteriaBuilder();
 			CriteriaQuery<Object> crt1 = cb.createQuery(Object.class);
 			Root<AddressEntity> root1 = crt1.from(AddressEntity.class);
-			crt1.select(cb.max(root1.get("id"))); 
+			crt1.select(cb.max(root1.get(Constants.ADDRESS_ID)));
 			Query query1 = session.createQuery(crt1);
-			//addrId = (String) query1.getSingleResult();
 			List results = query1.getResultList();
-			for(Object addrObj : results) {
+			for (Object addrObj : results) {
 				addrId = (String) addrObj;
 			}
-			System.out.println(addrId);
-//			CriteriaBuilder cb = session.getCriteriaBuilder();
-//			CriteriaQuery<String> cr = cb.createQuery(String.class);
-//			Root<AddressEntity> root = cr.from(AddressEntity.class);
-//			cr.multiselect(cb.max(root.get("id")));
-//			Query<String> query = session.createQuery(cr);
-//			List addrList = query.getResultList();
-//			if(addrList!=null) {
-//				for(AddressEntity addrObj : addrList) {
-//					custId = (String) addrObj.getId();
-//				}
-//			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -249,39 +296,12 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			CriteriaBuilder cb = session.getCriteriaBuilder();
 			CriteriaQuery<Object> crt1 = cb.createQuery(Object.class);
 			Root<CustomerEntity> root1 = crt1.from(CustomerEntity.class);
-			crt1.select(cb.max(root1.get("customerId"))); 
+			crt1.select(cb.max(root1.get(Constants.CUSTOMER_ID)));
 			Query query1 = session.createQuery(crt1);
 			List results = query1.getResultList();
-			for(Object custObj : results) {
+			for (Object custObj : results) {
 				custId = (String) custObj;
 			}
-			//custId = (String) query1.getSingleResult();
-			System.out.println(custId);
-//			@SuppressWarnings("deprecation")
-//			Criteria criteria = session.createCriteria(CustomerEntity.class).setProjection(Projections.max("customerId"));
-//			criteria.setMaxResults(1);
-//			@SuppressWarnings("unchecked")
-//			List<CustomerEntity> list = criteria.list();
-//			if(list!=null) {
-//				for(CustomerEntity custObj : list) {
-//					custId = (String) custObj.getCustomerId();
-//				}
-//			}
-//			else {
-//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
-//			}
-//			String hql1 = "SELECT MAX(customerId) FROM CustomerEntity";
-//			Query query = session.createQuery(hql1);
-//
-//			query.setMaxResults(1);
-//			// cust = (CustomerEntity) query.uniqueResult();
-//			if (query.uniqueResult() != null) {
-//				custId = (String) query.uniqueResult();
-//
-//			} else {
-//				throw new PecuniaException(ErrorConstants.ADD_DETAILS_ERROR);
-//			}
-
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -290,12 +310,20 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		}
 		logger.info(Constants.ADD_ACCOUNT_SUCCESSFUL);
 		return custId;
-
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : addAccount(Customer customer, Address address,Account account) 
+	 * - Input Parameters : Customer customer, Address address,Account account 
+	 * - Return Type : String 
+	 * - Throws : AccountException 
+	 * - Author : Vidushi Razdan 
+	 * - Creation Date : 27/10/2019 
+	 * - Description : Addition of new Account
+	 * @throws PecuniaException
+	 ********************************************************************************************************/	
 	
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
-		// String accId = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction txn = session.beginTransaction();
 		AccountEntity acc = new AccountEntity();
@@ -314,6 +342,16 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return account.getId();
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : calculateAccountId(Account account) 
+	 * - Input Parameters : Account account 
+	 * - Return Type : String 
+	 * - Throws : AccountException 
+	 * - Author : Aditi Singh
+	 * - Creation Date : 27/10/2019 
+	 * - Description : Calculation of new Account ID 
+	 * @throws PecuniaException
+	 ********************************************************************************************************/	
 	
 	public String calculateAccountId(Account account) throws PecuniaException, AccountException {
 		long oldId = 0;
@@ -341,7 +379,17 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		return id;
 	}
 
-	
+	/*******************************************************************************************************
+	 * - Function Name : validateAccountId(Account account) 
+	 * - Input Parameters : Account account 
+	 * - Return Type : boolean
+	 * - Throws : AccountException 
+	 * - Author : Aditi Singh 
+	 * - Creation Date : 27/10/2019 
+	 * - Description : Validation of Account ID
+	 * @throws PecuniaException
+	 ********************************************************************************************************/
+
 	public boolean validateAccountId(Account account) throws PecuniaException, AccountException {
 		boolean isValidated = false;
 		try {
@@ -353,9 +401,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			cr.select(root).where(cb.equal(root.get(Constants.ACCOUNT_ID), account.getId()));
 			Query<AccountEntity> q = session.createQuery(cr);
 			List results = q.getResultList();
-			if(!results.isEmpty()){
+			if (!results.isEmpty()) {
 				isValidated = true;
-			}else {
+			} else {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
