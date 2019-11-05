@@ -8,18 +8,17 @@ import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.exception.LoanException;
 
-
 @Service
 public class LoanServiceImpl implements LoanService {
-	
 
 	@Autowired
 	com.capgemini.pecunia.hibernate.dao.LoanDAO loanDao;
-	
+
 	@Autowired
 	AccountManagementService accountManagementService;
-	
+
 	Logger logger = Logger.getRootLogger();
+
 	/*******************************************************************************************************
 	 * -Function Name : calculateEMI(double amount, int tenure, double roi) -Input
 	 * Parameters : double amount, int tenure, double roi -Return Type : double
@@ -57,10 +56,9 @@ public class LoanServiceImpl implements LoanService {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new LoanException(e.getMessage());
-			
 
 		}
-		return loanId;	
+		return loanId;
 
 	}
 }

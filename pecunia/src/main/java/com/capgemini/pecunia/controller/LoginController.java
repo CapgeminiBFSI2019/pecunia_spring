@@ -26,6 +26,13 @@ public class LoginController {
 		@PostMapping(path = "/login")
 		
 		
+		/*******************************************************************************************************
+		 * - Function Name : String validateEmail(@RequestBody Map<String, Object> requestData)
+		 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+		 * requestData - Return Type : Boolean - Author : Kumar Saurabh - Creation Date :
+		 * 02/11/2019 - Description : Validating Id & Password
+		 ********************************************************************************************************/
+		
 	
 		public String validateEmail(@RequestBody Map<String, Object> requestData) {
 			JsonObject dataResponse = new JsonObject();  // Creating json object

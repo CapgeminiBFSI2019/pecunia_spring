@@ -32,11 +32,11 @@ public class LoanRequestController {
 
 		String type = requestData.get("type").toString();
 
-		int tenure = (int)Double.parseDouble(requestData.get("tenure").toString());
+		int tenure = (int) Double.parseDouble(requestData.get("tenure").toString());
 
 		double roi = Double.parseDouble(requestData.get("roi").toString());
 
-			String loanStatus = requestData.get("status").toString();
+		String loanStatus = requestData.get("status").toString();
 
 		int creditScore = Integer.parseInt(requestData.get("creditScore").toString());
 
