@@ -13,7 +13,7 @@ import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.service.LoginService;
 import com.google.gson.JsonObject;
-
+//Autowiring Login service from DAO
 @RestController
 public class LoginController {
 	
@@ -22,13 +22,20 @@ public class LoginController {
         @Autowired
 		LoginService loginService;
 
-		@CrossOrigin(origins = "http://localhost:4200")
+		@CrossOrigin(origins = "http://localhost:4200")  // Setting cross origin access to allow access from the specified server
 		@PostMapping(path = "/login")
 		
 		
+		/*******************************************************************************************************
+		 * - Function Name : String validateEmail(@RequestBody Map<String, Object> requestData)
+		 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+		 * requestData - Return Type : Boolean - Author : Kumar Saurabh - Creation Date :
+		 * 02/11/2019 - Description : Validating Id & Password
+		 ********************************************************************************************************/
+		
 	
 		public String validateEmail(@RequestBody Map<String, Object> requestData) {
-			JsonObject dataResponse = new JsonObject();
+			JsonObject dataResponse = new JsonObject();  // Creating json object
 
 			String username = requestData.get("username").toString();
 			String password = requestData.get("password").toString();

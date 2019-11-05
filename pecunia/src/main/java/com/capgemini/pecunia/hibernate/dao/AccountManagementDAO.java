@@ -1,5 +1,4 @@
 package com.capgemini.pecunia.hibernate.dao;
-
 import java.sql.SQLException;
 
 import com.capgemini.pecunia.dto.Account;

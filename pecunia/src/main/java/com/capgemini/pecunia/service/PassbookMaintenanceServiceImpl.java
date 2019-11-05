@@ -47,10 +47,8 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 	{
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
-			//PassbookMaintenanceDAO pdao = new PassbookMaintenanceDAOImpl();
-			Account account = new Account();
+ 			Account account = new Account();
 			account.setId(accountId);
-			//AccountManagementService accountManagementService = new AccountManagementServiceImpl();
 			boolean accountExist = accountManagementService.validateAccountId(account);
 			if (!accountExist) {
 				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
@@ -88,10 +86,8 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 		
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
-			//PassbookMaintenanceDAO pdao = new PassbookMaintenanceDAOImpl();
 			Account account = new Account();
 			account.setId(accountId);
-			//AccountManagementService accountManagementService = new AccountManagementServiceImpl();
 			boolean accountExist = accountManagementService.validateAccountId(account);
 			if(!accountExist)
 			{

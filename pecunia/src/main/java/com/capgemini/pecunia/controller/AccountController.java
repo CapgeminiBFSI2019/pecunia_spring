@@ -26,8 +26,7 @@ import com.google.gson.JsonObject;
 public class AccountController {
 
 	@Autowired
-	AccountManagementService accManagementService;
-
+	AccountManagementService accManagementService; // Autowiring AccountManagement service from DAO
 	@Autowired
 	Account account;
 	@Autowired
@@ -37,11 +36,13 @@ public class AccountController {
 	@Autowired
 	Address address;
 
-	@CrossOrigin(origins = "http://localhost:4200")
+//
+	@CrossOrigin(origins = "http://localhost:4200") // Setting cross origin access to allow access from the specified server
+													
 	@PostMapping(path = "/updateName")
 	public String updateCustomerName(@RequestBody Map<String, Object> requestData) {
 
-		JsonObject dataResponse = new JsonObject();
+		JsonObject dataResponse = new JsonObject(); // Creating json object
 		String accountId = requestData.get("accountId").toString();
 		String custName = requestData.get("name").toString();
 
@@ -146,7 +147,7 @@ public class AccountController {
 		String state = requestData.get("state").toString();
 		String country = requestData.get("country").toString();
 		String zipcode = requestData.get("zipcode").toString();
-        String accounttype = requestData.get("accountType").toString();
+		String accounttype = requestData.get("accountType").toString();
 		String branchid = requestData.get("branchId").toString();
 		double accountbalance = Double.parseDouble(requestData.get("balance").toString());
 		double accountinterest = Double.parseDouble(requestData.get("interest").toString());
@@ -180,7 +181,8 @@ public class AccountController {
 		}
 		return dataResponse.toString();
 	}
-    @CrossOrigin(origins = "http://localhost:4200")
+
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/deleteAccount")
 	public String deleteAccount(@RequestBody Map<String, Object> requestData) {
 
@@ -202,30 +204,28 @@ public class AccountController {
 
 		return dataResponse.toString();
 	}
-    
-    @CrossOrigin(origins = "http://localhost:4200")
+
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(path = "/accountDetail/{id}")
-    public String showAccountDetails(@PathVariable("id") String id) {
-    	
-    	Gson gson = new Gson();
-    	JsonObject dataResponse = new JsonObject();
+	public String showAccountDetails(@PathVariable("id") String id) {
+
+		Gson gson = new Gson();
+		JsonObject dataResponse = new JsonObject();
 		String accountId = id;
 
 		account.setId(accountId);
 		try {
-			
-			//Account accountrequested=new Account();
+
 			account = accManagementService.showAccountDetails(account);
 			String jsonInString = gson.toJson(account);
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("data", jsonInString);
 			dataResponse.addProperty("message", accountId.toString());
+		} catch (PecuniaException | AccountException e) {
+			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("message", e.getMessage());
 		}
-		 catch (PecuniaException | AccountException e) {
-				dataResponse.addProperty("success", false);
-				dataResponse.addProperty("message", e.getMessage());
-			}
 		return dataResponse.toString();
-    }
+	}
 
 }

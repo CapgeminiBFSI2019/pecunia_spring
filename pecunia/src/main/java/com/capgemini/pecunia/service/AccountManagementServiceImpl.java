@@ -45,6 +45,9 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 			boolean isValidated = validateAccountId(account);
 			if (isValidated) {
+
+				
+
 				isUpdated = accountDAO.deleteAccount(account);
 			} else {
 				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
@@ -74,7 +77,8 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			boolean isValidated = validateAccountId(account);
 			System.out.println(isValidated + "in service");
 			if (isValidated) {
-				System.out.println("Acc validated");
+			
+
 				isUpdated = accountDAO.updateCustomerName(account, customer);
 				System.out.println("isUpdated: "+isUpdated);
 			} else {
@@ -197,10 +201,14 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public boolean validateAccountId(Account account) throws PecuniaException, AccountException {
 		boolean isValidated = false;
 		boolean doesExist = false;
+
 		try {
 			doesExist = accountDAO.validateAccountId(account);
 			if(doesExist) {
 				isValidated=true;
+			} catch (Exception e) {
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				throw new AccountException(e.getMessage());
 			}
 		}catch (Exception e) {
 			logger.error(ErrorConstants.ACCOUNT_CLOSED);

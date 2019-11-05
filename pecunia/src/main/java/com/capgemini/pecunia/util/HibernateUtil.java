@@ -17,6 +17,7 @@ import com.capgemini.pecunia.entity.LoanDisbursalEntity;
 import com.capgemini.pecunia.entity.LoanRequestEntity;
 import com.capgemini.pecunia.entity.LoginEntity;
 import com.capgemini.pecunia.entity.TransactionEntity;
+//setting utilization for Hibernating the project
 public class HibernateUtil {
 	private static SessionFactory sessionFactory;
 	static Logger logger = Logger.getRootLogger();

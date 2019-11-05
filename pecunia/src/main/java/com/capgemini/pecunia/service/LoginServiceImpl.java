@@ -36,7 +36,6 @@ public class LoginServiceImpl implements LoginService {
 	public boolean validateEmail(Login login) throws PecuniaException, LoginException {
 		boolean isValidated = false;
 
-		//com.capgemini.pecunia.hibernate.dao.LoginDAO loginDAO = new com.capgemini.pecunia.hibernate.dao.LoginDAOImpl();
 		String password = null;
 		String secretKey = loginDAO.validateEmail(login);
 		if (secretKey == null) {

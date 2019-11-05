@@ -32,12 +32,13 @@ public class LoanRequestEntity {
 	private double emi;
 	@Column(name = "credit_Score")
 	private int creditScore;
-	
-   public LoanRequestEntity() {
-	   
-   }
-	public LoanRequestEntity(int loanId, String accountId, double amount, String type, int tenure, double roi, String status,
-			double emi,int creditScore) {
+
+	public LoanRequestEntity() {
+
+	}
+
+	public LoanRequestEntity(int loanId, String accountId, double amount, String type, int tenure, double roi,
+			String status, double emi, int creditScore) {
 		super();
 		this.loanId = loanId;
 		this.accountId = accountId;
@@ -46,16 +47,18 @@ public class LoanRequestEntity {
 		this.tenure = tenure;
 		this.roi = roi;
 		this.status = status;
-		this.emi = emi ;
+		this.emi = emi;
 		this.creditScore = creditScore;
 	}
 
 	public double getEmi() {
 		return emi;
 	}
+
 	public void setEmi(double emi) {
 		this.emi = emi;
 	}
+
 	public int getLoanId() {
 		return loanId;
 	}

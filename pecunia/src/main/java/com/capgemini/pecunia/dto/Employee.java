@@ -3,6 +3,8 @@ package com.capgemini.pecunia.dto;
 import org.springframework.stereotype.Component;
 
 @Component
+//Specifying datatypes for Employee class in DTO
+//Specifying getter and setter method for Employee class in DTO
 public class Employee {
 
 	private String id;

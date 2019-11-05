@@ -5,7 +5,6 @@ import com.capgemini.pecunia.dto.Cheque;
 import com.capgemini.pecunia.dto.Transaction;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
-
 public interface TransactionDAO {
 	public double getBalance(Account account) throws PecuniaException, TransactionException;
 

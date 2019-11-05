@@ -1,5 +1,5 @@
 package com.capgemini.pecunia.util;
-
+//specifying constants to be used by all the classes
 public class Constants {
 
 	public static final String CODE_SAVINGS = "01";
@@ -56,6 +56,9 @@ public class Constants {
 	public static final String CUSTOMER_ID = "customerId";
 
 	public static final String ADDRESS_ID = "id";
+	public static final String AMOUNT_CREDITED = "Amount is credited. Transaction Id is : ";
+	public static final String AMOUNT_DEBITED = "Amount is debited. Transaction Id is :";
+	
 
 
 }

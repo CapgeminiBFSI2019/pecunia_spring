@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import com.capgemini.pecunia.util.Constants;
 
-
+//Validating input for account 
 public class AccountInputValidator {
 	public static boolean checkIfDigit(String value) {
 

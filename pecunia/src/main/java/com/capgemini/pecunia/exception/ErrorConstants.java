@@ -1,5 +1,5 @@
 package com.capgemini.pecunia.exception;
-
+//Specifying error messages for every class
 public class ErrorConstants {
 
 	public static final String TECH_ERROR = "Technical problem occured.";

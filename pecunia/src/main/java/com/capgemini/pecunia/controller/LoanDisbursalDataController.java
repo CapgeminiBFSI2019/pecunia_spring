@@ -16,7 +16,7 @@ import com.capgemini.pecunia.service.LoanDisbursalServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
+//Autowiring LoanDisbursalData service from DAO
 @RestController
 public class LoanDisbursalDataController {
 	@Autowired
@@ -24,10 +24,10 @@ public class LoanDisbursalDataController {
 	@Autowired
 	LoanDisbursalService loanDisbursalService;
 
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = "http://localhost:4200")  // Setting cross origin access to allow access from the specified server
 	@GetMapping(path = "/loandisbursaldata")
 	public String retrieveRequests() throws IOException {
-		JsonObject dataResponse = new JsonObject();
+		JsonObject dataResponse = new JsonObject();  // Creating json object
 		JsonArray jsonArray = new JsonArray();
 		Gson gson = new Gson();
 		ArrayList<LoanDisbursal> retrieveLoanDisbursedData = new ArrayList<LoanDisbursal>();

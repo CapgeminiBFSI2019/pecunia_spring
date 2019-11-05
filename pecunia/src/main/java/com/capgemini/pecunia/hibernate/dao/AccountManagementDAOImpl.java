@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-//import org.hibernate.query.Query;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +25,8 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
+//implementing hibernate for AccountManagement DAO layer
+//fetching the data for account management operations from AccountManagement DAO layer
 
 @Repository
 public class AccountManagementDAOImpl implements AccountManagementDAO {
@@ -271,6 +272,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			Root<AddressEntity> root1 = crt1.from(AddressEntity.class);
 			crt1.select(cb.max(root1.get(Constants.ADDRESS_ID)));
 			Query query1 = session.createQuery(crt1);
+
+			
+
 			List results = query1.getResultList();
 			for (Object addrObj : results) {
 				addrId = (String) addrObj;
