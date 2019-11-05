@@ -54,7 +54,7 @@ public class LoanServiceImpl implements LoanService {
 			if (isValidAccount) {
 				loan.setEmi(LoanServiceImpl.calculateEMI(loan.getAmount(), loan.getTenure(), loan.getRoi()));
 				loanId = loanDao.addLoanDetails(loan);
-				logger.info("Loan details dal gaya");
+				logger.info("Loan details added successfully");
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
