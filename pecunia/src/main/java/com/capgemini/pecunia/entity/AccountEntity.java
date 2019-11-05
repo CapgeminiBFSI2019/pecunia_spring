@@ -16,8 +16,7 @@ import com.capgemini.pecunia.dto.Account;
 import com.capgemini.pecunia.dto.Transaction;
 
 @Entity
-@NamedQueries({
-		@NamedQuery(name = "AccountEntity.getBalanceById", query = "FROM AccountEntity where accountId =:accountId") })
+
 @Table(name = "account")
 public class AccountEntity {
 	@Id
