@@ -1,5 +1,6 @@
 package com.capgemini.pecunia.hibernate.dao;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
 @Repository
 public class LoanDAOImpl implements LoanDAO {
+	Logger logger = Logger.getRootLogger();
 
 	@Override
 	public int addLoanDetails(Loan loan) throws PecuniaException, LoanException {
@@ -42,8 +44,7 @@ public class LoanDAOImpl implements LoanDAO {
 			if(txn != null) {
 				txn.rollback();
 			}
-			System.out.println("LoanDao Error :"+e.getMessage());
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.LOAN_ADD_ERROR);
 
 		}
