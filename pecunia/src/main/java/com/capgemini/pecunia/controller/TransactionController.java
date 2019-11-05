@@ -33,11 +33,17 @@ public class TransactionController {
 	Transaction debitSlipTransaction;
 	@Autowired
 	Transaction creditSlipTransaction;
-	
-	
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/creditCheque")
+
+	/*******************************************************************************************************
+	 * - Function Name : creditUsingCheque(@RequestBody Map<String, Object>
+	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+	 * requestData - Return Type : String - Author : Rohan patil - Creation Date :
+	 * 02/11/2019 - Description : Credit Using Cheque
+	 ********************************************************************************************************/
+
 	public String creditUsingCheque(@RequestBody Map<String, Object> requestData) {
 		JsonObject dataResponse = new JsonObject();
 
@@ -79,6 +85,14 @@ public class TransactionController {
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/debitCheque")
+
+	/*******************************************************************************************************
+	 * - Function Name : debitUsingCheque(@RequestBody Map<String, Object>
+	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+	 * requestData - Return Type : String - Author : Anish Basu - Creation Date :
+	 * 02/11/2019 - Description : Debit Using Cheque
+	 ********************************************************************************************************/
+
 	public String debitUsingCheque(@RequestBody Map<String, Object> requestData) {
 		JsonObject dataResponse = new JsonObject();
 
@@ -113,55 +127,66 @@ public class TransactionController {
 		return dataResponse.toString();
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/debitSlip")
 
-@CrossOrigin(origins = "http://localhost:4200")
-@PostMapping(path = "/debitSlip")
-public String debitUsingSlip(@RequestBody Map<String, Object> requestData) {
-	JsonObject dataResponse = new JsonObject();
-	String accountNumber = requestData.get("accountNumber").toString();
-	double amount = Double.parseDouble(requestData.get("debitSlipAmount").toString());
-	System.out.println(accountNumber + amount + "\n");
-	debitSlipTransaction.setAmount(amount);
-	debitSlipTransaction.setAccountId(accountNumber);
-//	debitSlip.setAccountNo(accountNumber);
-	
-	try {
-		int transId = transactionService.debitUsingSlip(debitSlipTransaction);
-		dataResponse.addProperty("success", true);
-		dataResponse.addProperty("Transaction Id", transId);
-		dataResponse.addProperty("message", "Amount debited.Trans Id is \t" + transId);
+	/*******************************************************************************************************
+	 * - Function Name : debitUsingSlip(@RequestBody Map<String, Object>
+	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+	 * requestData - Return Type : String - Author : Anwesha Das - Creation Date :
+	 * 02/11/2019 - Description : Debit Using Slip
+	 ********************************************************************************************************/
 
-	} catch (TransactionException | PecuniaException e) {
-		dataResponse.addProperty("success", false);
-		dataResponse.addProperty("message", e.getMessage());
+	public String debitUsingSlip(@RequestBody Map<String, Object> requestData) {
+		JsonObject dataResponse = new JsonObject();
+		String accountNumber = requestData.get("accountNumber").toString();
+		double amount = Double.parseDouble(requestData.get("debitSlipAmount").toString());
+		System.out.println(accountNumber + amount + "\n");
+		debitSlipTransaction.setAmount(amount);
+		debitSlipTransaction.setAccountId(accountNumber);
+
+		try {
+			int transId = transactionService.debitUsingSlip(debitSlipTransaction);
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("Transaction Id", transId);
+			dataResponse.addProperty("message", "Amount debited.Trans Id is \t" + transId);
+
+		} catch (TransactionException | PecuniaException e) {
+			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("message", e.getMessage());
+		}
+		return dataResponse.toString();
 	}
-	return dataResponse.toString();
-}
 
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/creditSlip")
 
+	/*******************************************************************************************************
+	 * - Function Name : creditUsingSlip(@RequestBody Map<String, Object>
+	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+	 * requestData - Return Type : String - Author : Arpan Mondal - Creation Date :
+	 * 02/11/2019 - Description : Credit Using Slip
+	 ********************************************************************************************************/
 
-@CrossOrigin(origins = "http://localhost:4200")
-@PostMapping(path = "/creditSlip")
-public String creditUsingSlip(@RequestBody Map<String, Object> requestData) {
-	JsonObject dataResponse = new JsonObject();
-	String accountNumber = requestData.get("accountNumber").toString();
-	double amount = Double.parseDouble(requestData.get("creditSlipAmount").toString());
-	System.out.println(accountNumber + amount + "\n");
-	creditSlipTransaction.setAmount(amount);
-	creditSlipTransaction.setAccountId(accountNumber);
-//	debitSlip.setAccountNo(accountNumber);
-	
-	try {
-		int transId = transactionService.creditUsingSlip(creditSlipTransaction);
-		dataResponse.addProperty("success", true);
-		dataResponse.addProperty("Transaction Id", transId);
-		dataResponse.addProperty("message", "Amount credited.Trans Id is \t" + transId);
+	public String creditUsingSlip(@RequestBody Map<String, Object> requestData) {
+		JsonObject dataResponse = new JsonObject();
+		String accountNumber = requestData.get("accountNumber").toString();
+		double amount = Double.parseDouble(requestData.get("creditSlipAmount").toString());
+		System.out.println(accountNumber + amount + "\n");
+		creditSlipTransaction.setAmount(amount);
+		creditSlipTransaction.setAccountId(accountNumber);
 
-	} catch (TransactionException | PecuniaException e) {
-		dataResponse.addProperty("success", false);
-		dataResponse.addProperty("message", e.getMessage());
+		try {
+			int transId = transactionService.creditUsingSlip(creditSlipTransaction);
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("Transaction Id", transId);
+			dataResponse.addProperty("message", "Amount credited.Trans Id is \t" + transId);
+
+		} catch (TransactionException | PecuniaException e) {
+			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("message", e.getMessage());
+		}
+		return dataResponse.toString();
 	}
-	return dataResponse.toString();
-}
 
 }
