@@ -27,6 +27,16 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 	private String transTo;
 	private double closingBalance;
 
+	/*******************************************************************************************************
+	 * - Function Name : updatePassbook(String accountId) 
+	 * - Input Parameters : String accountId
+	 * - Return Type : List 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Mansi Agarwal
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update transaction details in passbook
+	 ********************************************************************************************************/
+	
 	public List<com.capgemini.pecunia.dto.Transaction> updatePassbook(String accountId) throws PassbookException, PecuniaException {
 		ArrayList<com.capgemini.pecunia.dto.Transaction> transList = new ArrayList<>();
 		
@@ -46,7 +56,16 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 	 return transList;
 	}
 		
-
+	/*******************************************************************************************************
+	 * - Function Name : updateLastUpdated(String accountId) 
+	 * - Input Parameters : String accountId
+	 * - Return Type : boolean 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Mansi Agarwal
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update the date of last transaction printed in passbook
+	 ********************************************************************************************************/
+	
 	public boolean updateLastUpdated(String accountId) throws PecuniaException, PassbookException {
 		
 		boolean isUpdated = false;
@@ -71,6 +90,16 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 		return isUpdated;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : accountSummary(String accountId, Date startDate, Date endDate) 
+	 * - Input Parameters : String accountId, Date startDate, Date endDate
+	 * - Return Type : List 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Rishav Dev
+	 * - Creation Date : 02/11/2019 
+	 * - Description : Provides the account summary
+	 ********************************************************************************************************/
+	
 	public List<com.capgemini.pecunia.dto.Transaction> accountSummary(String accountId, LocalDate startDate, LocalDate endDate)
 			throws PassbookException, PecuniaException {
 		ArrayList<com.capgemini.pecunia.dto.Transaction> transList = new ArrayList<>();
@@ -93,6 +122,15 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 	 return transList;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : passbookDetails(List<TransactionEntity> res) 
+	 * - Input Parameters : List<TransactionEntity> res
+	 * - Return Type : List 
+	 * - Author : Mansi Agarwal
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update transaction details in list
+	 ********************************************************************************************************/
+	
 	private ArrayList<com.capgemini.pecunia.dto.Transaction> passbookDetails(List<TransactionEntity> res){
 		ArrayList<com.capgemini.pecunia.dto.Transaction> transList = new ArrayList<>();
 		for(TransactionEntity object : res){
