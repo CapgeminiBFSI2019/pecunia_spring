@@ -206,9 +206,6 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			doesExist = accountDAO.validateAccountId(account);
 			if(doesExist) {
 				isValidated=true;
-			} catch (Exception e) {
-				logger.error(ErrorConstants.ACCOUNT_CLOSED);
-				throw new AccountException(e.getMessage());
 			}
 		}catch (Exception e) {
 			logger.error(ErrorConstants.ACCOUNT_CLOSED);
