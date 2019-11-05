@@ -11,8 +11,6 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
-//implementing hibernate for Login DAO layer
-//fetching the data for Login operation from Login DAO layer
 
 @Repository
 public class LoginDAOImpl implements LoginDAO {

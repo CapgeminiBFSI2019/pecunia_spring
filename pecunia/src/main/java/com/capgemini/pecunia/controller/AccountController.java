@@ -26,7 +26,7 @@ import com.google.gson.JsonObject;
 public class AccountController {
 
 	@Autowired
-	AccountManagementService accManagementService; // Autowiring AccountManagement service from DAO
+	AccountManagementService accManagementService;
 	@Autowired
 	Account account;
 	@Autowired
@@ -37,12 +37,12 @@ public class AccountController {
 	Address address;
 
 //
-	@CrossOrigin(origins = "http://localhost:4200") // Setting cross origin access to allow access from the specified server
+	@CrossOrigin(origins = "http://localhost:4200") 
 													
 	@PostMapping(path = "/updateName")
 	public String updateCustomerName(@RequestBody Map<String, Object> requestData) {
 
-		JsonObject dataResponse = new JsonObject(); // Creating json object
+		JsonObject dataResponse = new JsonObject(); 
 		String accountId = requestData.get("accountId").toString();
 		String custName = requestData.get("name").toString();
 

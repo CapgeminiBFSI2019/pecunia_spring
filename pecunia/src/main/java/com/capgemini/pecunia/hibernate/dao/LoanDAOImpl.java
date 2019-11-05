@@ -12,8 +12,6 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
 
 @Repository
-//implementing hibernate for Loan DAO layer
-//fetching the data for Loan operations from Loan DAO layer
 
 public class LoanDAOImpl implements LoanDAO {
 	Logger logger = Logger.getRootLogger();

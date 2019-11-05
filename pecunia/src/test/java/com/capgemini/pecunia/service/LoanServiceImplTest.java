@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.exception.LoanException;
 import com.capgemini.pecunia.util.Constants;
-//JUNIT test cases for Loan Service class
 
 class LoanServiceImplTest {
 

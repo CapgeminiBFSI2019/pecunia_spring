@@ -3,8 +3,6 @@ package com.capgemini.pecunia.dto;
 import org.springframework.stereotype.Component;
 
 @Component
-//Specifying datatypes for Branch class in DTO
-//Specifying getter and setter method for Branch class in DTO
 public class Branch {
 	private String id;
 	private String name;

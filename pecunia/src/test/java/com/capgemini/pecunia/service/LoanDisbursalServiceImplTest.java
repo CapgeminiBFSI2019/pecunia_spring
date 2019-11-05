@@ -19,7 +19,6 @@ import com.capgemini.pecunia.exception.PecuniaException;
 
 class LoanDisbursalServiceImplTest {
 	
-	//JUNIT test cases for LoanDisbursal Service class
 
 LoanDisbursalServiceImpl loanDisbursal;
 	

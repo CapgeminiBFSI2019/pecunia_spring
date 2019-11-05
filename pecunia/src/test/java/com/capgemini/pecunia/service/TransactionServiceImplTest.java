@@ -16,7 +16,6 @@ import com.capgemini.pecunia.dto.Transaction;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.util.Constants;
-//JUNIT test cases for Transaction Service class
 
 class TransactionServiceImplTest {
 

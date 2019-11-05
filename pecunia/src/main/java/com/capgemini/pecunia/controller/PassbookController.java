@@ -17,7 +17,6 @@ import com.capgemini.pecunia.service.PassbookMaintenanceService;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-//Autowiring Passbook service from DAO
 @RestController
 public class PassbookController {
 	
@@ -30,7 +29,7 @@ public class PassbookController {
 	@Autowired
 	Transaction updatePassbook;
 	
-	@CrossOrigin(origins = "http://localhost:4200")  // Setting cross origin access to allow access from the specified server
+	@CrossOrigin(origins = "http://localhost:4200")  
 	@PostMapping(path = "/accountSummary")
 	
 	/*******************************************************************************************************
@@ -50,7 +49,7 @@ public class PassbookController {
 		LocalDate startDate = LocalDate.parse(requestData.get("startDate").toString());
 		LocalDate endDate = LocalDate.parse(requestData.get("endDate").toString());
 				
-		JsonArray jsonArray = new JsonArray();  // Creating json object
+		JsonArray jsonArray = new JsonArray();  
 	
 		Gson gson = new Gson();
 	

@@ -3,8 +3,6 @@ package com.capgemini.pecunia.dto;
 import org.springframework.stereotype.Component;
 
 @Component
-//Specifying datatypes for Address class in DTO
-//Specifying getter and setter method for Address class in DTO
 public class Address {
 	private String id;
 	private String line1;

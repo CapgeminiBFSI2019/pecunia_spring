@@ -1,8 +1,6 @@
 package com.capgemini.pecunia.dto;
 
 import java.util.Date;
-//Specifying datatypes for Ledger class in DTO
-//Specifying getter and setter method for Ledger class in DTO
 public class Ledger {
 	private String id;
 	private Date date;

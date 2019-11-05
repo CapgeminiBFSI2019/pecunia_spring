@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 @RestController
-//Autowiring LoanDisbursalRequest service from DAO
 public class LoanDisbursalRequestsController {
 	@Autowired
 	Loan loan;
@@ -32,14 +31,14 @@ public class LoanDisbursalRequestsController {
 	LoanDisbursalService loanDisbursalService;
 	
 	
-	@CrossOrigin(origins = "http://localhost:4200")  // Setting cross origin access to allow access from the specified server
+	@CrossOrigin(origins = "http://localhost:4200")  
 	@RequestMapping(value = "/loandisbursal/{menuOption}", method = RequestMethod.GET)
 	@GetMapping(value = "/loandisbursal/{menuOption}")
 	@ResponseBody
 	public String loanRequests(
 	  @PathVariable String menuOption) throws IOException {
 		
-		JsonArray jsonArray = new JsonArray();  // Creating json object
+		JsonArray jsonArray = new JsonArray();  
 		Gson gson = new Gson();
 		JsonObject dataResponse = new JsonObject();
 		ArrayList<Loan> retrieveAll = new ArrayList<Loan>();

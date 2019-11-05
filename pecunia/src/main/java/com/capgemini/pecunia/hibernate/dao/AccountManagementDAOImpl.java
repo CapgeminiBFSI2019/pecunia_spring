@@ -25,8 +25,6 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.HibernateUtil;
-//implementing hibernate for AccountManagement DAO layer
-//fetching the data for account management operations from AccountManagement DAO layer
 
 @Repository
 public class AccountManagementDAOImpl implements AccountManagementDAO {

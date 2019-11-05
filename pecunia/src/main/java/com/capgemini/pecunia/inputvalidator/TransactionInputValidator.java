@@ -1,5 +1,4 @@
 package com.capgemini.pecunia.inputvalidator;
-//Validating input for transaction
 
 public class TransactionInputValidator {
 

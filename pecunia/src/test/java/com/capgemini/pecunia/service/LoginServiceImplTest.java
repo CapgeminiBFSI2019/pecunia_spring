@@ -11,7 +11,6 @@ import com.capgemini.pecunia.dto.Login;
 import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
 
-//JUNIT test cases for Login Service class
 
 class LoginServiceImplTest {
 	

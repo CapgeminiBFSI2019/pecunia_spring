@@ -14,8 +14,6 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.util.HibernateUtil;
-//implementing hibernate for Transaction DAO layer
-//fetching the data for transaction operations from Transaction DAO layer
 
 @Repository
 public class TransactionDAOImpl implements TransactionDAO {

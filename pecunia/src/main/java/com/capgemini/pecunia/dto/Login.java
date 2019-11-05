@@ -3,8 +3,6 @@ package com.capgemini.pecunia.dto;
 import org.springframework.stereotype.Component;
 
 @Component
-//Specifying datatypes for Login class in DTO
-//Specifying getter and setter method for Login class in DTO
 public class Login {
 
 	public Login() {

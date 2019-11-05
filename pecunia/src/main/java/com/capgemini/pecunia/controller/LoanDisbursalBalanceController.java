@@ -19,7 +19,7 @@ import com.capgemini.pecunia.service.LoanDisbursalServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-//Autowiring LoanDisbursalBalance service from DAO
+
 @RestController
 public class LoanDisbursalBalanceController {
 	@Autowired
@@ -31,7 +31,7 @@ public class LoanDisbursalBalanceController {
 	@Autowired
 	LoanDisbursalService loanDisbursalService;
 	
-	@CrossOrigin(origins = "http://localhost:4200") // Setting cross origin access to allow access from the specified server
+	@CrossOrigin(origins = "http://localhost:4200") 
 	
 	@GetMapping(path = "/loandisbursalbalanceupdation")
 	

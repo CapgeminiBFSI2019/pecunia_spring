@@ -12,7 +12,6 @@ import com.capgemini.pecunia.dto.Loan;
 import com.capgemini.pecunia.exception.LoanException;
 import com.capgemini.pecunia.service.LoanService;
 import com.google.gson.JsonObject;
-//Autowiring LoanRequest service from DAO
 @RestController
 public class LoanRequestController {
 	@Autowired
@@ -20,11 +19,11 @@ public class LoanRequestController {
 	@Autowired
 	LoanService loanService;
 
-	@CrossOrigin(origins = "http://localhost:4200")  // Setting cross origin access to allow access from the specified server
+	@CrossOrigin(origins = "http://localhost:4200") 
 	@PostMapping(path = "/LoanRequest")
 	public String loanRequest(@RequestBody Map<String, Object> requestData) {
 
-		JsonObject dataResponse = new JsonObject();  // Creating json object
+		JsonObject dataResponse = new JsonObject();  
   
 		String accountId = requestData.get("accountId").toString();
 

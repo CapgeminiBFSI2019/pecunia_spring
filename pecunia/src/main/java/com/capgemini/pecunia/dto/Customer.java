@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 @Component
-//Specifying datatypes for Customer class in DTO
-//Specifying getter and setter method for Customer class in DTO
 public class Customer {
 
 	private String id;

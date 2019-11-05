@@ -16,7 +16,6 @@ import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.Constants;
 
-//JUNIT test cases for AccountManagement Service class
 
 class AccountManagementServiceImplTest {
 

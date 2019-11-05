@@ -13,8 +13,6 @@ import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.util.HibernateUtil;
-//implementing hibernate for PassbookMaintenance DAO layer
-//fetching the data for passbook maintenance operations from PassbookMaintenance DAO layer
 
 @Repository
 public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {

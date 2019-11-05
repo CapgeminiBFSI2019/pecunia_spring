@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 @Component
-//Specifying datatypes for Cheque class in DTO
-//Specifying getter and setter method for Cheque class in DTO
 public class Cheque {
 
 	private String id;

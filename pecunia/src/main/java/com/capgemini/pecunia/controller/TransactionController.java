@@ -15,7 +15,6 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.service.TransactionService;
 import com.google.gson.JsonObject;
-//Autowiring Transaction service from DAO
 @RestController
 public class TransactionController {
 
@@ -44,7 +43,7 @@ public class TransactionController {
 	 ********************************************************************************************************/
 
 	public String creditUsingCheque(@RequestBody Map<String, Object> requestData) {
-		JsonObject dataResponse = new JsonObject();  // Creating json object
+		JsonObject dataResponse = new JsonObject();  
 
 		String payeeAccountNumber = requestData.get("payeeAccountNumber").toString();
 		String beneficiaryAccountNumber = requestData.get("beneficiaryAccountNumber").toString();
@@ -157,8 +156,7 @@ public class TransactionController {
 		return dataResponse.toString();
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
-	@PostMapping(path = "/creditSlip")
+	
 
 	/*******************************************************************************************************
 	 * - Function Name : creditUsingSlip(@RequestBody Map<String, Object>
@@ -167,6 +165,8 @@ public class TransactionController {
 	 * 02/11/2019 - Description : Credit Using Slip
 	 ********************************************************************************************************/
 
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/creditSlip")
 	public String creditUsingSlip(@RequestBody Map<String, Object> requestData) {
 		JsonObject dataResponse = new JsonObject();
 		String accountNumber = requestData.get("accountNumber").toString();
