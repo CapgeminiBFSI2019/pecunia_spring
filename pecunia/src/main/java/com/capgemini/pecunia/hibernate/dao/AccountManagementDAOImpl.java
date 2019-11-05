@@ -359,14 +359,19 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		String id = null;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			String hql = "SELECT max(accountId) FROM AccountEntity WHERE accountId LIKE :accountId";
-			Query query = session.createQuery(hql);
-			query.setParameter("accountId", account.getId() + "%");
-			query.setMaxResults(1);
-			if (query.uniqueResult() != null) {
-				oldIdstr = (String) query.uniqueResult();
-			} else {
-				oldIdstr = account.getId() + "000000";
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<Object> crt1 = cb.createQuery(Object.class);
+			Root<AccountEntity> root1 = crt1.from(AccountEntity.class);
+			crt1.select(cb.max(root1.get(Constants.ACCOUNT_ID))).where(cb.like(root1.<String>get(Constants.ACCOUNT_ID), account.getId()+"%"));
+			Query query1 = session.createQuery(crt1);
+			List results = query1.getResultList();			
+			for(Object accObj : results) {
+				if(accObj!=null) {
+					oldIdstr = (String) accObj;
+				}
+				else {
+					oldIdstr = account.getId() + "000000";
+				}
 			}
 			oldId = Long.parseLong(oldIdstr);
 			id = Long.toString(oldId + 1);
@@ -394,7 +399,6 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		boolean isValidated = false;
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			System.out.println(session.getSessionFactory());
 			CriteriaBuilder cb = session.getCriteriaBuilder();
 			CriteriaQuery<AccountEntity> cr = cb.createQuery(AccountEntity.class);
 			Root<AccountEntity> root = cr.from(AccountEntity.class);
@@ -407,8 +411,6 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
 			logger.error(e.getMessage());
 			throw new AccountException(e.getMessage());
 		}
