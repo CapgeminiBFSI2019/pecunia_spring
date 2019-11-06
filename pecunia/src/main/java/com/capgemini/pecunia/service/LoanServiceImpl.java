@@ -20,10 +20,12 @@ public class LoanServiceImpl implements LoanService {
 	Logger logger = Logger.getRootLogger();
 
 	/*******************************************************************************************************
-	 * -Function Name : calculateEMI(double amount, int tenure, double roi) -Input
-	 * Parameters : double amount, int tenure, double roi -Return Type : double
-	 * -Author : Rishabh Rai -Creation Date : 24/09/2019 -Description : Takes the
-	 * Amount,tenure and Rate of Interest as parameter and returns emi for the loan
+	 * -Function Name : calculateEMI(double amount, int tenure, double roi) 
+	 * -Input Parameters : double amount, int tenure, double roi 
+	 * -Return Type : double
+	 * -Author : Rishabh Rai 
+	 * -Creation Date : 24/09/2019
+	 * -Description : Takes the Amount,tenure and Rate of Interest as parameter and returns emi for the loan
 	 ********************************************************************************************************/
 
 	public static double calculateEMI(double amount, int tenure, double roi) {
@@ -35,9 +37,13 @@ public class LoanServiceImpl implements LoanService {
 	}
 
 	/*******************************************************************************************************
-	 * -Function Name :createLoanRequest(Loan loan) -Input Parameters : Loan loan
-	 * -Return Type : boolean -Author : Rishabh Rai -Creation Date : 24/09/2019
-	 * -@Throws LoanException -Description : Create entry for loan Request
+	 * -Function Name :createLoanRequest(Loan loan) 
+	 * -Input Parameters : Loan loan
+	 * -Return Type : int
+	 * -Author : Rishabh Rai
+	 * -Creation Date : 24/09/2019
+	 * -@Throws LoanException
+	 * -Description : Create entry for loan Request
 	 ********************************************************************************************************/
 
 	public int createLoanRequest(Loan loan) throws LoanException {
