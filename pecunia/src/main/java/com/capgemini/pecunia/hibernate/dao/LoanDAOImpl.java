@@ -16,7 +16,15 @@ import com.capgemini.pecunia.util.HibernateUtil;
 public class LoanDAOImpl implements LoanDAO {
 	Logger logger = Logger.getRootLogger();
 
-	@Override
+	/*******************************************************************************************************
+     * - Function Name :addLoanDetails(Loan loan)
+     * - Input Parameters : Loan loan
+     * - Return Type : int
+     * - Throws : LoanException , Pecunia Exception
+     * - Author : Rishabh Rai
+     * - Creation Date : 27/10/2019
+     * - Description : Addition of loan request details
+     ********************************************************************************************************/
 	public int addLoanDetails(Loan loan) throws PecuniaException, LoanException {
 
 		int loanId = 0;
